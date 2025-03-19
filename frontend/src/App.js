@@ -17,5 +17,6 @@ function App() {
     </div>
   );
 }
+console.log("Backend URL:", process.env.REACT_APP_API_URL);
 
 export default App;
