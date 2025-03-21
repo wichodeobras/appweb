@@ -66,7 +66,7 @@ function App() {
     };
 
     axios
-      .post("https://django-backend.onrender.com/api/ir/create/", payload)
+      .post("https://django-backend-3vty.onrender.com/ir/create/", payload)
       .then((response) => {
         console.log("Perfil creado:", response.data);
         alert("Perfil creado correctamente");
