@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse  # Agregar esta importación
-from .views import hello_world
+from .views import hello_world, ir_list, ir_detail, ir_create, ir_update, ir_delete
 
 def home(request):
     return HttpResponse("¡Backend funcionando en Render!")
@@ -26,5 +26,10 @@ urlpatterns = [
     path('', home, name='home'),  # Nueva ruta para "/"
     path('api/message/', hello_world),
     path('admin/', admin.site.urls),
+    path('ir/', ir_list, name='ir_list'),
+    path('ir/<int:ir_id>/', ir_detail, name='ir_detail'),
+    path('ir/create/', ir_create, name='ir_create'),
+    path('ir/<int:ir_id>/update/', ir_update, name='ir_update'),
+    path('ir/<int:ir_id>/delete/', ir_delete, name='ir_delete'),
 ]
 
