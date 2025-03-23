@@ -10,4 +10,5 @@ services:
         value: "django-backend.onrender.com"
       - key: DJANGO_SECRET_KEY
         generateValue: true
-    preDeployCommand: python manage.py migrate
+    preDeployCommand: bash -c "python manage.py migrate --noinput"
+
