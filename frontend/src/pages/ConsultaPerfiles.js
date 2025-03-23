@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ConsultaPerfiles.css";
+import { Link } from "react-router-dom";
 
 function ConsultaPerfiles() {
   const [message, setMessage] = useState("");
@@ -156,45 +157,44 @@ function ConsultaPerfiles() {
     setSelectedProfileId("");
   };
 
+
+  const camposInfo = {
+    designacion_mm: { label: "Designación (mm)", unidad: "" },
+    designacion_pulg: { label: "Designación (pulgadas)", unidad: "" },
+    d: { label: "Altura total (d)", unidad: "mm" },
+    h: { label: "Altura útil (h)", unidad: "mm" },
+    tw: { label: "Espesor alma (tw)", unidad: "mm" },
+    bf: { label: "Ancho patín (bf)", unidad: "mm" },
+    tf: { label: "Espesor patín (tf)", unidad: "mm" },
+    peso: { label: "Peso", unidad: "kg/m" },
+    area: { label: "Área", unidad: "cm²" },
+    ix: { label: "Ix", unidad: "cm⁴" },
+    zx: { label: "Zx", unidad: "cm³" },
+    sx: { label: "Sx", unidad: "cm³" },
+    rx: { label: "rx", unidad: "cm" },
+    iy: { label: "Iy", unidad: "cm⁴" },
+    zy: { label: "Zy", unidad: "cm³" },
+    sy: { label: "Sy", unidad: "cm³" },
+    ry: { label: "ry", unidad: "cm" },
+    j: { label: "J (constante torsión)", unidad: "cm⁴" },
+    cw: { label: "Cw", unidad: "cm⁶" },
+  };
+  
+
   const handleNuevoPerfil = () => {
     resetForm();
   };
 
   return (
     <div className="container">
-      <h1>PERFIL IR</h1>
+
+      <Link to="/">Volver a la página principal</Link>
+      <h1>PERFILES IR</h1>
       <p>{message}</p>
 
       <button type="button" onClick={handleNuevoPerfil}>
         Nuevo Perfil
       </button>
-
-      <form onSubmit={handleSubmit}>
-        <div className="section" id="perfil">
-          <h2>{editingId ? "Editar Perfil" : "Agregar Perfil"}</h2>
-
-          {Object.entries(perfil).map(([key, value]) => (
-            <div className="input-group" key={key}>
-              <label htmlFor={key}>{key}:</label>
-              <input
-                type="text"
-                id={key}
-                value={value}
-                onChange={handleChange}
-              />
-            </div>
-          ))}
-
-          <button type="submit">
-            {editingId ? "Actualizar Perfil" : "Agregar Perfil"}
-          </button>
-          {editingId && (
-            <button type="button" onClick={() => handleDelete(editingId)}>
-              Eliminar Perfil
-            </button>
-          )}
-        </div>
-      </form>
 
       <div className="section" id="lista-perfiles">
         <h2>Perfiles Guardados</h2>
@@ -236,6 +236,41 @@ function ConsultaPerfiles() {
           <p>No hay perfiles guardados</p>
         )}
       </div>
+
+      <form onSubmit={handleSubmit}>
+        <div className="section" id="perfil">
+          <h2>{editingId ? "Editar Perfil" : "Agregar Perfil"}</h2>
+
+          {Object.entries(perfil).map(([key, value]) => (
+            <div className="input-group" key={key}>
+              <label htmlFor={key}>{camposInfo[key]?.label || key}</label>
+              <div className="input-con-unidad">
+                <input
+                  type="text"
+                  id={key}
+                  value={value}
+                  onChange={handleChange}
+                />
+                {camposInfo[key]?.unidad && (
+                  <span className="unidad">{camposInfo[key].unidad}</span>
+                )}
+              </div>
+            </div>
+          ))}
+
+
+          <button type="submit">
+            {editingId ? "Actualizar Perfil" : "Agregar Perfil"}
+          </button>
+          {editingId && (
+            <button type="button" onClick={() => handleDelete(editingId)}>
+              Eliminar Perfil
+            </button>
+          )}
+        </div>
+      </form>
+
+      
     </div>
   );
 }

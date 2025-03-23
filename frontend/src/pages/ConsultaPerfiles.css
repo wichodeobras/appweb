@@ -59,3 +59,10 @@ body {
     width: 100%;
     max-width: 400px;
   }
+
+  .unidad {
+    margin-left: 4px;
+    color: #888;
+    font-size: 0.9em;
+  }
+  
