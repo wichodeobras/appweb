@@ -111,8 +111,6 @@ class CF(models.Model):
     x_c = models.FloatField(help_text="xc (cm)")
     e_o = models.FloatField(help_text="eₒ (cm)")
 
-    def __str__(self):
-        return f"{self.designacion_mm} / {self.designacion_pulg}"
 
     def __str__(self):
         return f"{self.designacion_mm} / {self.designacion_pulg}"
