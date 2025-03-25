@@ -565,7 +565,7 @@ class ZF(models.Model):
     
 
 class ConceptoObra(models.Model):
-    clave = models.CharField(max_length=20, unique=True)  # Clave identificadora, única
+    clave = models.CharField(max_length=40, unique=True)  # Clave identificadora, única
     descripcion = models.TextField()  # Descripción del concepto
     unidad = models.CharField(max_length=10)  # Unidad de medida (m2, m3, pieza, etc.)
     costo_directo = models.DecimalField(max_digits=12, decimal_places=2)  # Costo directo con precisión
