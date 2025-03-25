@@ -114,3 +114,451 @@ class CF(models.Model):
 
     def __str__(self):
         return f"{self.designacion_mm} / {self.designacion_pulg}"
+
+class HR(models.Model):
+    designacion_metrico = models.CharField(max_length=50)
+    designacion_ingles = models.CharField(max_length=50)
+
+    # Peralte
+    d = models.FloatField()
+
+    # Alma
+    h = models.FloatField()
+    tw = models.FloatField()
+
+    # Patín
+    bf = models.FloatField()
+    tf = models.FloatField()
+
+    # Distancias
+    k_dis = models.FloatField()
+    k_det = models.FloatField()
+    k1 = models.FloatField()
+    T = models.FloatField()
+
+    # Gramiles
+    g = models.FloatField()
+    g1 = models.FloatField()
+
+    # Sujetadores
+    diametro_sujetador_mm = models.FloatField()
+    diametro_sujetador_pulg = models.CharField(max_length=20)
+
+    # Área y pandeo
+    area = models.FloatField()
+    b_2tf = models.FloatField()
+    h_tw = models.FloatField()
+
+    # Propiedades en eje X-X
+    ix = models.FloatField()
+    zx = models.FloatField()
+    sx = models.FloatField()
+    rx = models.FloatField()
+
+    # Propiedades en eje Y-Y
+    iy = models.FloatField()
+    zy = models.FloatField()
+    sy = models.FloatField()
+    ry = models.FloatField()
+
+    # Torsión
+    j = models.FloatField()
+    cw = models.FloatField()
+
+class IC(models.Model):
+    designacion_metrico = models.CharField(max_length=50)
+    designacion_ingles = models.CharField(max_length=50)
+
+    # Peralte
+    d = models.FloatField()
+
+    # Ancho total
+    d1 = models.FloatField()
+
+    # Alma
+    h = models.FloatField()
+    tw = models.FloatField()
+
+    # Patín
+    bf = models.FloatField()
+    tf = models.FloatField()
+
+    # Distancia entre ejes
+    e = models.FloatField()
+
+    # Dimensiones adicionales
+    k_det = models.FloatField()
+    T1 = models.FloatField()
+
+    # Gramil
+    g = models.FloatField()
+
+    # Sujetadores
+    diametro_sujetador_mm = models.FloatField()
+    diametro_sujetador_pulg = models.CharField(max_length=20)
+
+    # Área y pandeo
+    area = models.FloatField()
+    b_2tf = models.FloatField()
+
+    # Propiedades X-X y Y-Y (idénticas en este caso)
+    i = models.FloatField()
+    z = models.FloatField()
+    s = models.FloatField()
+    r = models.FloatField()
+
+    # Torsión
+    j = models.FloatField()
+    cw = models.FloatField()
+
+class IE(models.Model):
+    designacion_metrico = models.CharField(max_length=50)
+    designacion_ingles = models.CharField(max_length=50)
+
+    # Peralte
+    d = models.FloatField()
+
+    # Alma
+    h = models.FloatField()
+    tw = models.FloatField()
+
+    # Patín
+    bf = models.FloatField()
+    tf = models.FloatField()
+
+    # Distancias
+    k = models.FloatField()
+    T = models.FloatField()
+
+    # Gramiles
+    g = models.FloatField()
+    g1 = models.FloatField()
+
+    # Sujetadores
+    diametro_sujetador_mm = models.FloatField(null=True, blank=True)
+    diametro_sujetador_pulg = models.CharField(max_length=20, null=True, blank=True)
+
+    # Área y pandeo
+    area = models.FloatField()
+    b_2tf = models.FloatField()
+    h_tw = models.FloatField()
+
+    # Propiedades X - X
+    ix = models.FloatField()
+    zx = models.FloatField()
+    sx = models.FloatField()
+    rx = models.FloatField()
+
+    # Propiedades Y - Y
+    iy = models.FloatField()
+    zy = models.FloatField()
+    sy = models.FloatField()
+    ry = models.FloatField()
+
+    # Torsión
+    j = models.FloatField()
+    cw = models.FloatField()
+
+class IRR(models.Model):
+    designacion_metrico = models.CharField(max_length=50)
+    designacion_ingles = models.CharField(max_length=50)
+
+    # Peralte
+    d = models.FloatField()
+
+    # Alma
+    h = models.FloatField()
+    tw = models.FloatField()
+
+    # Patín
+    bf = models.FloatField()
+    tf = models.FloatField()
+
+    # Distancias
+    k_dis = models.FloatField()
+    k_det = models.FloatField()
+    k1 = models.FloatField()
+    T = models.FloatField()
+
+    # Gramiles
+    g = models.FloatField()
+    g1 = models.FloatField()
+
+    # Sujetadores
+    diametro_sujetador_mm = models.FloatField(null=True, blank=True)
+    diametro_sujetador_pulg = models.CharField(max_length=20, null=True, blank=True)
+
+    # Área y pandeo local
+    area = models.FloatField()
+    b_2tf = models.FloatField()
+    h_tw = models.FloatField()
+
+    # Propiedades eje X - X
+    ix = models.FloatField()
+    zx = models.FloatField()
+    sx = models.FloatField()
+    rx = models.FloatField()
+
+    # Propiedades eje Y - Y
+    iy = models.FloatField()
+    zy = models.FloatField()
+    sy = models.FloatField()
+    ry = models.FloatField()
+
+    # Torsión
+    j = models.FloatField()
+    cw = models.FloatField()
+
+class LD(models.Model):
+    designacion_metrico = models.CharField(max_length=100)
+    designacion_ingles = models.CharField(max_length=100)
+    peso = models.FloatField()
+    area = models.FloatField()
+
+    # Dimensiones
+    k = models.FloatField()
+    g = models.FloatField()
+    g1 = models.FloatField(null=True, blank=True)
+    g2 = models.FloatField(null=True, blank=True)
+
+    # Sujetadores
+    diametro_sujetador_mm = models.FloatField(null=True, blank=True)
+    diametro_sujetador_pulg = models.CharField(max_length=20, null=True, blank=True)
+
+    # Eje X - X
+    ix = models.FloatField()
+    zx = models.FloatField()
+    sx = models.FloatField()
+    rx = models.FloatField()
+    yx = models.FloatField()
+
+    # Eje Y - Y
+    iy = models.FloatField()
+    zy = models.FloatField()
+    sy = models.FloatField()
+    ry = models.FloatField()
+    xbar = models.FloatField()
+
+    # Eje W - W
+    iww = models.FloatField()
+    sww = models.FloatField()
+    rww = models.FloatField()
+
+    # Eje Z - Z
+    izz = models.FloatField()
+    szz = models.FloatField()
+    rzz = models.FloatField()
+
+    # Torsión
+    j = models.FloatField()
+    cw = models.FloatField()
+    ro = models.FloatField()
+
+class LI(models.Model):
+    designacion_metrico = models.CharField(max_length=50)
+    designacion_ingles = models.CharField(max_length=50)
+    peso = models.FloatField()
+    area = models.FloatField()
+
+    # Dimensiones
+    k = models.FloatField()
+    g = models.FloatField()
+    g1 = models.FloatField(null=True, blank=True)
+    g2 = models.FloatField(null=True, blank=True)
+
+    # Sujetadores
+    diametro_sujetador_mm = models.FloatField(null=True, blank=True)
+    diametro_sujetador_pulg = models.CharField(max_length=20, null=True, blank=True)
+
+    # Propiedades de torsión
+    j = models.FloatField()
+    cw = models.FloatField()
+    ro = models.FloatField()
+
+    # Propiedades eje X - X y Y - Y (son iguales)
+    i_xy = models.FloatField()
+    z_xy = models.FloatField()
+    s_xy = models.FloatField()
+    r_xy = models.FloatField()
+    xbarra_ybarra = models.FloatField()
+
+    # Eje Z - Z
+    i_zz = models.FloatField()
+    s_zz = models.FloatField()
+    r_zz = models.FloatField()
+
+class OC(models.Model):
+    designacion_metrico = models.CharField(max_length=50)
+    designacion_ingles = models.CharField(max_length=50)
+    
+    t_diseño = models.FloatField()
+    peso_kg_m = models.FloatField()
+    peso_lb_ft = models.FloatField()
+    area = models.FloatField()
+    pandeo_local = models.FloatField()
+
+    # Propiedades X - X y Y - Y (simétricas)
+    i = models.FloatField()
+    z = models.FloatField()
+    s = models.FloatField()
+    r = models.FloatField()
+
+    # Torsión
+    j = models.FloatField()
+    c = models.FloatField()
+
+class ORC(models.Model):
+    designacion_metrico = models.CharField(max_length=100)
+    designacion_ingles = models.CharField(max_length=100)
+    
+    t_diseno = models.FloatField()
+    peso_kg_m = models.FloatField()
+    peso_lb_ft = models.FloatField()
+    area = models.FloatField()
+    pandeo_local = models.FloatField()
+    superficie_exterior = models.FloatField()
+
+    # Propiedades X - X y Y - Y (simétricas)
+    i = models.FloatField()
+    z = models.FloatField()
+    s = models.FloatField()
+    r = models.FloatField()
+
+    # Torsión
+    j = models.FloatField()
+    c = models.FloatField()
+
+class ORR(models.Model):
+    designacion_metrico = models.CharField(max_length=100)
+    designacion_ingles = models.CharField(max_length=100)
+    
+    t_diseno = models.FloatField()
+    peso_kg_m = models.FloatField()
+    peso_lb_ft = models.FloatField()
+    area = models.FloatField()
+
+    # Pandeo local
+    pandeo_b_t = models.FloatField()
+    pandeo_h_t = models.FloatField()
+
+    # Superficie exterior
+    superficie_exterior = models.FloatField()
+
+    # Propiedades eje X - X
+    ix = models.FloatField()
+    ix_1 = models.FloatField()
+    zx = models.FloatField()
+    sx = models.FloatField()
+    rx = models.FloatField()
+
+    # Propiedades eje Y - Y
+    iy = models.FloatField()
+    zy = models.FloatField()
+    sy = models.FloatField()
+    ry = models.FloatField()
+
+    # Torsión
+    j = models.FloatField()
+    c = models.FloatField()
+
+    # Longitudes planas
+    longitud_plana_vertical = models.FloatField()
+    longitud_plana_horizontal = models.FloatField()
+
+class OS(models.Model):
+    designacion_diametro_metrico = models.CharField(max_length=50)
+    designacion_diametro_ingles = models.CharField(max_length=50)
+    
+    peso_kg_m = models.FloatField()
+    peso_lb_ft = models.FloatField()
+    area = models.FloatField()
+
+    # Propiedades estructurales X - X y Y - Y (simétricas)
+    i = models.FloatField()
+    s = models.FloatField()
+    r = models.FloatField()
+
+class TR(models.Model):
+    designacion_metrico = models.CharField(max_length=100)
+    designacion_ingles = models.CharField(max_length=100)
+
+    # Geometría
+    d = models.FloatField()
+    h = models.FloatField()
+    tw = models.FloatField()
+    bf = models.FloatField()
+    tf = models.FloatField()
+
+    # Distancias
+    k_dis = models.FloatField()
+    k_det = models.FloatField()
+    k1 = models.FloatField()
+
+    # Gramiles
+    g = models.FloatField()
+    g1 = models.FloatField()
+
+    # Sujetadores
+    diametro_sujetador_mm = models.FloatField()
+    diametro_sujetador_pulg = models.CharField(max_length=20)
+
+    # Área y relación de pandeo
+    area = models.FloatField()
+    h_tw = models.FloatField()
+
+    # Eje X - X
+    ix = models.FloatField()
+    zx = models.FloatField()
+    sx = models.FloatField()
+    rx = models.FloatField()
+    y_barra = models.FloatField()
+
+    # Eje Y - Y
+    iy = models.FloatField()
+    zy = models.FloatField()
+    sy = models.FloatField()
+    ry = models.FloatField()
+
+    # Torsión
+    j = models.FloatField()
+    cw = models.FloatField()
+
+class ZF(models.Model):
+    designacion_metrico = models.CharField(max_length=100)
+    designacion_ingles = models.CharField(max_length=100)
+    calibre = models.CharField(max_length=10)
+    espesor_pulg = models.FloatField()
+    espesor_mm = models.FloatField()
+    peso_kg_m = models.FloatField()
+
+    # Geometría
+    ho = models.FloatField()
+    bo = models.FloatField()
+    c = models.FloatField()
+    R = models.FloatField()
+
+    # Área
+    area_total = models.FloatField()
+
+    # Propiedades efectivas en X para Fy = 3515
+    ae_3515 = models.FloatField()
+    idx_3515 = models.FloatField()
+    sxe_3515 = models.FloatField()
+
+    # Propiedades efectivas en X para Fy = 2320
+    ae_2320 = models.FloatField()
+    idx_2320 = models.FloatField()
+    sxe_2320 = models.FloatField()
+
+    # Otras propiedades
+    rx = models.FloatField()
+    iy = models.FloatField()
+    sy = models.FloatField()
+    ry = models.FloatField()
+    ixy = models.FloatField()
+    ix2 = models.FloatField()
+    iy2 = models.FloatField()
+    rmin = models.FloatField()
+    theta = models.FloatField()
+    j = models.FloatField()
+    cw = models.FloatField()
