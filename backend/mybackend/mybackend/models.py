@@ -572,3 +572,50 @@ class ConceptoObra(models.Model):
 
     def __str__(self):
         return f"{self.clave} - {self.descripcion[:50]}"
+
+class Infraestructura(models.Model):
+    clave = models.CharField(max_length=40, unique=True)  # Clave identificadora, única
+    descripcion = models.TextField()  # Descripción del concepto
+    unidad = models.CharField(max_length=10)  # Unidad de medida (m2, m3, pieza, etc.)
+    costo_directo = models.DecimalField(max_digits=12, decimal_places=2)  # Costo directo con precisión
+
+    def __str__(self):
+        return f"{self.clave} - {self.descripcion[:50]}"
+
+class CEAS(models.Model):
+    clave = models.CharField(max_length=40, unique=True)  # Clave identificadora, única
+    descripcion = models.TextField()  # Descripción del concepto
+    unidad = models.CharField(max_length=10)  # Unidad de medida (m2, m3, pieza, etc.)
+    costo_directo = models.DecimalField(max_digits=12, decimal_places=2)  # Costo directo con precisión
+
+    def __str__(self):
+        return f"{self.clave} - {self.descripcion[:50]}"
+
+class SEP(models.Model):
+    clave = models.CharField(max_length=40, unique=True)  # Clave identificadora, única
+    descripcion = models.TextField()  # Descripción del concepto
+    unidad = models.CharField(max_length=10)  # Unidad de medida (m2, m3, pieza, etc.)
+    costo_directo = models.DecimalField(max_digits=12, decimal_places=2)  # Costo directo con precisión
+
+    def __str__(self):
+        return f"{self.clave} - {self.descripcion[:50]}"
+
+class SCPT_AP(models.Model):
+    clave = models.CharField(max_length=40, unique=True)  # Clave identificadora, única
+    descripcion = models.TextField()  # Descripción del concepto
+    unidad = models.CharField(max_length=10)  # Unidad de medida (m2, m3, pieza, etc.)
+    costo_directo = models.DecimalField(max_digits=12, decimal_places=2)  # Costo directo con precisión
+
+    def __str__(self):
+        return f"{self.clave} - {self.descripcion[:50]}"
+
+class SCPT_BP(models.Model):
+    clave = models.CharField(max_length=40, unique=True)  # Clave identificadora, única
+    descripcion = models.TextField()  # Descripción del concepto
+    unidad = models.CharField(max_length=10)  # Unidad de medida (m2, m3, pieza, etc.)
+    costo_directo = models.DecimalField(max_digits=12, decimal_places=2)  # Costo directo con precisión
+
+    def __str__(self):
+        return f"{self.clave} - {self.descripcion[:50]}"
+
+ 
