@@ -618,4 +618,5 @@ class SCPT_BP(models.Model):
     def __str__(self):
         return f"{self.clave} - {self.descripcion[:50]}"
 
+
  
