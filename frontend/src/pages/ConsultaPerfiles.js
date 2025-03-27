@@ -45,7 +45,9 @@ function ProfileViewer() {
     }
     // Se busca el perfil que tenga designacion_mm igual a la clave
     const profile = profiles.find(
-      (p) => p.designacion_mm && p.designacion_mm === clave
+      (p) =>
+        (p.designacion_mm?.toLowerCase() === clave.toLowerCase() ||
+         p.designacion_metrico?.toLowerCase() === clave.toLowerCase())
     );
     if (profile) {
       // Se omite el id y se muestran el resto de propiedades
@@ -61,7 +63,7 @@ function ProfileViewer() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.h1}>Visualizador de Perfiles de Acero</h1>
+      <h1 style={styles.h1}>PERFILES IMCA</h1>
 
       <Link to="/">Volver a la página principal</Link>
 
@@ -95,12 +97,17 @@ function ProfileViewer() {
         style={styles.select}
       >
         <option value="">-- Selecciona una medida --</option>
-        {profiles.map((profile) => (
-          <option key={profile.id} value={profile.designacion_mm}>
-            {profile.designacion_mm}
-          </option>
-        ))}
+        {profiles.map((profile) => {
+          const medida =
+            profile.designacion_mm || profile.designacion_metrico || "Sin medida";
+          return (
+            <option key={profile.id} value={medida}>
+              {medida}
+            </option>
+          );
+        })}
       </select>
+
 
       <button onClick={handleShowProperties} style={styles.button}>
         Mostrar propiedades
