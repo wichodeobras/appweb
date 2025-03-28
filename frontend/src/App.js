@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import ConsultaPerfiles from "./pages/ConsultaPerfiles";
 import ColumnaCompres from "./pages/DiseñoCompres";
+import CatalogosPres from "./pages/Catalogos";
 
 //import PredioPlot from "./pages/PlanPred";
 
@@ -36,7 +37,7 @@ function Home() {
       <nav>
         <ul>
           <li>
-            <Link to="/cat">Catalogos</Link>
+            <Link to="/Catal">Catalogos</Link>
           </li>
         </ul>
       </nav>
@@ -51,7 +52,7 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route path="/perfiles" component={ConsultaPerfiles} />
         <Route path="/DisCompres" component={ColumnaCompres} />
-        
+        <Route path="/Catal" component={CatalogosPres} />
       </Switch>
     </Router>
   );
