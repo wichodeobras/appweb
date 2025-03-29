@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 
+
+const endpointMapping = {
+    
+  INFRAESTRUCTURA: "infra",
+  SEP: "SEP"
+};
+
 function CatalogosPres() {
   const BASE_URL = "https://django-backend-3vty.onrender.com/api/";
   // Mapeo de catálogo a endpoint (ajusta según corresponda)
-  const endpointMapping = {
-    CAPCEE: "ir",
-    INFRAESTRUCTURA: "infra",
-    SEP: "SEP",
-    "CEAS SCT AP": "hp",
-    "SCT BP": "ce",
-  };
+
 
   // Estados
   const [catalogData, setCatalogData] = useState([]);

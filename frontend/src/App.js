@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import ConsultaPerfiles from "./pages/ConsultaPerfiles";
 import ColumnaCompres from "./pages/DiseñoCompres";
 import CatalogosPres from "./pages/Catalogos";
+import DiseñoViga from "./pages/VIGACERO";
+import './App.css';
+
 
 //import PredioPlot from "./pages/PlanPred";
 
@@ -11,16 +14,13 @@ function Home() {
   return (
     <div className="container">
       <h1>Bienvenido, Selecciona un servicio</h1>
-      <h2>DISEÑO ESTRUCTURAL</h2>
+      <h2>DISEÑO ESTRUCTURAL IMCA 6ta EDICION</h2>
       <h3>ACERO</h3>
       <nav>
         <ul>
-          <li>
-            <Link to="/perfiles">Perfiles de acero IMCA 6ta Ed</Link>
-          </li>
-          <li>
-            <Link to="/DisCompres">Diseño de columna a compresión axial</Link>
-          </li>
+          <li><Link to="/perfiles">Perfiles de acero</Link></li>
+          <li><Link to="/DisCompres">Diseño de columna a compresión axial</Link></li>
+          <li><Link to="/DisVig">Diseño de viga por flexión</Link></li>
         </ul>
       </nav>
       <h2>TOPOGRAFIA</h2>
@@ -53,6 +53,7 @@ function App() {
         <Route path="/perfiles" component={ConsultaPerfiles} />
         <Route path="/DisCompres" component={ColumnaCompres} />
         <Route path="/Catal" component={CatalogosPres} />
+        <Route path="/DisVig" component={DiseñoViga} />
       </Switch>
     </Router>
   );

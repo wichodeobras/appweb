@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-//import axios from "axios";
-
 //import "./ConsultaPerfiles.css";
 import { Link } from "react-router-dom";
-//<Link to="/">Volver a la página principal</Link>
+
 
 
 const BASE_URL = "https://django-backend-3vty.onrender.com";
@@ -11,11 +9,11 @@ const BASE_URL = "https://django-backend-3vty.onrender.com";
 const tiposPerfil = ["IR", "HP", "CE", "CF", "HR", "IC", "IE", "IRR", "LD", "LI"];
 
 function ProfileViewer() {
-  const [selectedTipo, setSelectedTipo] = useState("");
-  const [profiles, setProfiles] = useState([]);
-  const [selectedMedida, setSelectedMedida] = useState("");
-  const [busqueda, setBusqueda] = useState("");
-  const [profileProperties, setProfileProperties] = useState("");
+  const [selectedTipo, setSelectedTipo] = useState(""); //guarda el tipo de perfil seleccionado
+  const [profiles, setProfiles] = useState([]); //lista de perfiles obtenidos desde el servidor según el tipo seleccionado
+  const [selectedMedida, setSelectedMedida] = useState(""); //medida seleccionada de la lista desplegable
+  const [busqueda, setBusqueda] = useState(""); //texto escrito manualmente por el usuario para busca
+  const [profileProperties, setProfileProperties] = useState(""); //propiedades del perfil encontrado para mostrar
 
   // Cuando se selecciona un tipo, se hace fetch al endpoint correspondiente
   useEffect(() => {
