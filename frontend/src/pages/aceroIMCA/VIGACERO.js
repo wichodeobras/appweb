@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { CalcCb, calcrts, calcFcr, F2Mn, LimiteLp, LimiteLr } from '../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroFlexión'
-import ThreeViga from "../graficos/ThreeViga";
+//import { CalcCb, calcrts, calcFcr, F2Mn, LimiteLp, LimiteLr } from '../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroFlexión'
+import ThreeViga from "../../graficos/ThreeViga";
 
 
 const BASE_URL = "https://django-backend-3vty.onrender.com";
@@ -136,7 +136,7 @@ function DiseñoViga() {
         <>
             <div>
                 <h1 style={styles.h1}>DISEÑO POR FLEXIÓN VIGA IR</h1>
-                <Link to="/">Volver a la página principal</Link>
+                <Link to="/Diseflex">Volver a la página principal</Link>
             </div>
             <div style={styles.rowContainer}>
                 <div style={styles.sectionBox}>
