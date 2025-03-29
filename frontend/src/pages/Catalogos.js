@@ -1,47 +1,140 @@
 import React, { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 
 const endpointMapping = {
-    
   INFRAESTRUCTURA: "infra",
   SEP: "SEP"
 };
 
+const styles = {
+  container: {
+    fontFamily: "Arial, sans-serif",
+    backgroundColor: "#f5f5f5",
+    margin: 0,
+    padding: 20,
+  },
+  h1: {
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  panel: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 8,
+    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    marginBottom: 20,
+  },
+  catalogHeader: {
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  label: {
+    fontWeight: "bold",
+    display: "block",
+    marginBottom: 5,
+  },
+  input: {
+    width: "100%",
+    padding: 8,
+    marginBottom: 10,
+    fontSize: "1rem",
+  },
+  button: {
+    backgroundColor: "#d9534f",
+    color: "white",
+    border: "none",
+    padding: "8px 12px",
+    cursor: "pointer",
+    borderRadius: 4,
+    marginTop: 10,
+    display: "block",
+    width: "100%",
+  },
+  select: {
+    width: "100%",
+    padding: 8,
+    marginBottom: 10,
+    fontSize: "1rem",
+  },
+  tableContainer: {
+    maxHeight: 400,
+    overflowY: "auto",
+    border: "1px solid #ccc",
+    borderRadius: 6,
+  },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+  },
+  th: {
+    border: "1px solid #ccc",
+    padding: 8,
+    textAlign: "center",
+    backgroundColor: "#f0f0f0",
+  },
+  td: {
+    border: "1px solid #ccc",
+    padding: 8,
+    textAlign: "center",
+  },
+  emptyDropMessage: {
+    padding: "100px",
+    textAlign: "center",
+    fontStyle: "italic",
+    color: "#888",
+  },
+  
+};
+
 function CatalogosPres() {
   const BASE_URL = "https://django-backend-3vty.onrender.com/api/";
-  // Mapeo de catálogo a endpoint (ajusta según corresponda)
 
-
-  // Estados
+  const [allCatalogs, setAllCatalogs] = useState({});
   const [catalogData, setCatalogData] = useState([]);
   const [displayedCatalogData, setDisplayedCatalogData] = useState([]);
   const [selectedCatalogType, setSelectedCatalogType] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [budgetItems, setBudgetItems] = useState([]);
 
-  // Al cambiar el catálogo, se consulta la API
+  // Carga todos los catálogos al montar el componente
   useEffect(() => {
-    if (selectedCatalogType) {
-      fetch(BASE_URL + endpointMapping[selectedCatalogType] + "/")
-        .then((response) => response.json())
-        .then((data) => {
-          setCatalogData(data);
-          setDisplayedCatalogData(data);
-        })
-        .catch((err) => {
-          console.error(err);
-          setCatalogData([]);
-          setDisplayedCatalogData([]);
+    const fetchAllCatalogs = async () => {
+      try {
+        const catalogKeys = Object.keys(endpointMapping);
+        const results = await Promise.all(
+          catalogKeys.map((key) =>
+            fetch(BASE_URL + endpointMapping[key] + "/")
+              .then((response) => response.json())
+              .then((data) => [key, data])
+          )
+        );
+        const catalogs = {};
+        results.forEach(([key, data]) => {
+          catalogs[key] = data;
         });
+        setAllCatalogs(catalogs);
+      } catch (error) {
+        console.error("Error fetching catalogs: ", error);
+      }
+    };
+    fetchAllCatalogs();
+  }, []);
+
+  // Actualiza los datos del catálogo mostrado al cambiar la selección o al cargar todos los catálogos
+  useEffect(() => {
+    if (selectedCatalogType && allCatalogs[selectedCatalogType]) {
+      setCatalogData(allCatalogs[selectedCatalogType]);
+      setDisplayedCatalogData(allCatalogs[selectedCatalogType]);
     } else {
       setCatalogData([]);
       setDisplayedCatalogData([]);
     }
-  }, [selectedCatalogType]);
+  }, [selectedCatalogType, allCatalogs]);
 
   // Maneja el cambio en el select de catálogo
   const handleCatalogTypeChange = (e) => {
     setSelectedCatalogType(e.target.value);
+    setSearchQuery("");
   };
 
   // Filtra el catálogo según el término de búsqueda
@@ -83,7 +176,8 @@ function CatalogosPres() {
     setBudgetItems((prev) => {
       const newBudget = [...prev];
       newBudget[index].cantidad = parseFloat(newQuantity) || 0;
-      const costo = newBudget[index].costo || newBudget[index].costo_directo || 0;
+      const costo =
+        newBudget[index].costo || newBudget[index].costo_directo || 0;
       newBudget[index].importe = (newBudget[index].cantidad * costo).toFixed(2);
       return newBudget;
     });
@@ -100,63 +194,33 @@ function CatalogosPres() {
   };
 
   return (
-    <div
-      style={{
-        fontFamily: "Arial, sans-serif",
-        backgroundColor: "#f5f5f5",
-        margin: 0,
-        padding: 20,
-      }}
-    >
-      <h1 style={{ textAlign: "center", marginBottom: 20 }}>
-        Catálogo de Conceptos y Presupuesto
-      </h1>
+    <div style={styles.container}>
+      <h1 style={styles.h1}>Catálogo de Conceptos y Presupuesto</h1>
+      <Link to="/">Volver a la página principal</Link>
 
       {/* Panel de Catálogo */}
-      <div
-        className="catalog-panel"
-        style={{
-          backgroundColor: "#fff",
-          padding: 20,
-          borderRadius: 8,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          marginBottom: 20,
-        }}
-      >
-        <h2 style={{ textAlign: "center", marginBottom: 10 }}>Catálogos</h2>
-        <label style={{ fontWeight: "bold", display: "block", marginBottom: 5 }} htmlFor="busqueda">
+      <div style={styles.panel}>
+        <h2 style={styles.catalogHeader}>Catálogos</h2>
+        <label style={styles.label} htmlFor="busqueda">
           Buscar concepto
         </label>
         <input
           type="text"
           id="busqueda"
-          placeholder="Ej. IR 200x100x5"
-          style={{ width: "100%", padding: 8, marginBottom: 10, fontSize: "1rem" }}
+          placeholder="Ingresa la clave del concepto"
+          style={styles.input}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button
-          onClick={handleSearch}
-          style={{
-            backgroundColor: "#d9534f",
-            color: "white",
-            border: "none",
-            padding: "8px 12px",
-            cursor: "pointer",
-            borderRadius: 4,
-            marginTop: 10,
-            display: "block",
-            width: "100%",
-          }}
-        >
+        <button onClick={handleSearch} style={styles.button}>
           BUSCAR
         </button>
-        <label style={{ fontWeight: "bold", display: "block", marginBottom: 5 }} htmlFor="catalogType">
+        <label style={styles.label} htmlFor="catalogType">
           Tipo de Catálogo:
         </label>
         <select
           id="catalogType"
-          style={{ width: "100%", padding: 8, marginBottom: 10, fontSize: "1rem" }}
+          style={styles.select}
           value={selectedCatalogType}
           onChange={handleCatalogTypeChange}
         >
@@ -164,68 +228,14 @@ function CatalogosPres() {
           <option value="INFRAESTRUCTURA">INFRAESTRUCTURA</option>
           <option value="SEP">SEP</option>
         </select>
-        <div
-          id="catalogContainer"
-          style={{
-            maxHeight: 400,
-            overflowY: "auto",
-            border: "1px solid #ccc",
-            borderRadius: 6,
-          }}
-        >
-          <table
-            id="catalogTable"
-            style={{ width: "100%", borderCollapse: "collapse" }}
-          >
-            <thead
-              style={{
-                position: "sticky",
-                top: 0,
-                backgroundColor: "#f0f0f0",
-                zIndex: 1,
-              }}
-            >
+        <div id="catalogContainer" style={styles.tableContainer}>
+          <table id="catalogTable" style={styles.table}>
+            <thead>
               <tr>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Clave
-                </th>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Descripción
-                </th>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Unidad
-                </th>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Costo Directo
-                </th>
+                <th style={styles.th}>Clave</th>
+                <th style={styles.th}>Descripción</th>
+                <th style={styles.th}>Unidad</th>
+                <th style={styles.th}>Costo Directo</th>
               </tr>
             </thead>
             <tbody>
@@ -236,54 +246,15 @@ function CatalogosPres() {
                     draggable
                     onDragStart={(e) => handleDragStart(e, concept)}
                   >
-                    <td
-                      style={{
-                        border: "1px solid #ccc",
-                        padding: 8,
-                        textAlign: "center",
-                      }}
-                    >
-                      {concept.clave}
-                    </td>
-                    <td
-                      style={{
-                        border: "1px solid #ccc",
-                        padding: 8,
-                        textAlign: "center",
-                      }}
-                    >
-                      {concept.descripcion}
-                    </td>
-                    <td
-                      style={{
-                        border: "1px solid #ccc",
-                        padding: 8,
-                        textAlign: "center",
-                      }}
-                    >
-                      {concept.unidad}
-                    </td>
-                    <td
-                      style={{
-                        border: "1px solid #ccc",
-                        padding: 8,
-                        textAlign: "center",
-                      }}
-                    >
-                      ${concept.costo_directo}
-                    </td>
+                    <td style={styles.td}>{concept.clave}</td>
+                    <td style={styles.td}>{concept.descripcion}</td>
+                    <td style={styles.td}>{concept.unidad}</td>
+                    <td style={styles.td}>${concept.costo_directo}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td
-                    style={{
-                      border: "1px solid #ccc",
-                      padding: 8,
-                      textAlign: "center",
-                    }}
-                    colSpan="4"
-                  >
+                  <td style={styles.td} colSpan="4">
                     Selecciona un catálogo para ver los conceptos.
                   </td>
                 </tr>
@@ -294,18 +265,8 @@ function CatalogosPres() {
       </div>
 
       {/* Panel de Presupuesto */}
-      <div
-        className="budget-panel"
-        style={{
-          backgroundColor: "#fff",
-          padding: 20,
-          borderRadius: 8,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        }}
-      >
-        <h2 style={{ textAlign: "center", marginBottom: 10 }}>
-          Presupuesto
-        </h2>
+      <div style={styles.panel}>
+        <h2 style={styles.catalogHeader}>Presupuesto</h2>
         <div
           id="budgetContainer"
           className="budget-container"
@@ -313,192 +274,55 @@ function CatalogosPres() {
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
         >
-          <table
-            id="budgetTable"
-            style={{ width: "100%", borderCollapse: "collapse" }}
-          >
+          <table id="budgetTable" style={styles.table}>
             <thead>
               <tr>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Clave
-                </th>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Descripción
-                </th>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Unidad
-                </th>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Costo Unitario
-                </th>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Cantidad
-                </th>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Importe
-                </th>
-                <th
-                  style={{
-                    border: "1px solid #ccc",
-                    padding: 8,
-                    textAlign: "center",
-                    backgroundColor: "#f0f0f0",
-                  }}
-                >
-                  Acción
-                </th>
+                <th style={styles.th}>Clave</th>
+                <th style={styles.th}>Descripción</th>
+                <th style={styles.th}>Unidad</th>
+                <th style={styles.th}>Costo Unitario</th>
+                <th style={styles.th}>Cantidad</th>
+                <th style={styles.th}>Importe</th>
+                <th style={styles.th}>Acción</th>
               </tr>
             </thead>
             <tbody>
-              {budgetItems.map((item, index) => (
-                <tr key={index}>
-                  <td
-                    style={{
-                      border: "1px solid #ccc",
-                      padding: 8,
-                      textAlign: "center",
-                    }}
-                  >
-                    {item.clave}
-                  </td>
-                  <td
-                    style={{
-                      border: "1px solid #ccc",
-                      padding: 8,
-                      textAlign: "center",
-                    }}
-                  >
-                    {item.descripcion}
-                  </td>
-                  <td
-                    style={{
-                      border: "1px solid #ccc",
-                      padding: 8,
-                      textAlign: "center",
-                    }}
-                  >
-                    {item.unidad}
-                  </td>
-                  <td
-                    style={{
-                      border: "1px solid #ccc",
-                      padding: 8,
-                      textAlign: "center",
-                    }}
-                  >
-                    {item.costo || item.costo_directo}
-                  </td>
-                  <td
-                    style={{
-                      border: "1px solid #ccc",
-                      padding: 8,
-                      textAlign: "center",
-                    }}
-                  >
-                    <input
-                      type="number"
-                      min="0"
-                      value={item.cantidad}
-                      onChange={(e) =>
-                        handleQuantityChange(index, e.target.value)
-                      }
-                      style={{ width: 60 }}
-                    />
-                  </td>
-                  <td
-                    style={{
-                      border: "1px solid #ccc",
-                      padding: 8,
-                      textAlign: "center",
-                    }}
-                  >
-                    {item.importe}
-                  </td>
-                  <td
-                    style={{
-                      border: "1px solid #ccc",
-                      padding: 8,
-                      textAlign: "center",
-                    }}
-                  >
-                    <button
-                      onClick={() => removeBudgetItem(index)}
-                      style={{
-                        backgroundColor: "#d9534f",
-                        color: "white",
-                        border: "none",
-                        padding: "8px 12px",
-                        cursor: "pointer",
-                        borderRadius: 4,
-                        marginTop: 10,
-                        display: "block",
-                        width: "100%",
-                      }}
-                    >
-                      Eliminar
-                    </button>
+              {budgetItems.length === 0 ? (
+                <tr>
+                  <td style={styles.emptyDropMessage} colSpan="7">
+                     Arrastra tus conceptos aquí para agregarlos al presupuesto
                   </td>
                 </tr>
-              ))}
+              ) : (
+                budgetItems.map((item, index) => (
+                  <tr key={index}>
+                    <td style={styles.td}>{item.clave}</td>
+                    <td style={styles.td}>{item.descripcion}</td>
+                    <td style={styles.td}>{item.unidad}</td>
+                    <td style={styles.td}>{item.costo || item.costo_directo}</td>
+                    <td style={styles.td}>
+                      <input
+                        type="number"
+                        min="0"
+                        value={item.cantidad}
+                        onChange={(e) => handleQuantityChange(index, e.target.value)}
+                        style={{ width: 60 }}
+                      />
+                    </td>
+                    <td style={styles.td}>{item.importe}</td>
+                    <td style={styles.td}>
+                      <button onClick={() => removeBudgetItem(index)} style={styles.button}>
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
+
           </table>
         </div>
-        <button
-          onClick={clearBudget}
-          style={{
-            backgroundColor: "#d9534f",
-            color: "white",
-            border: "none",
-            padding: "8px 12px",
-            cursor: "pointer",
-            borderRadius: 4,
-            marginTop: 10,
-            display: "block",
-            width: "100%",
-          }}
-        >
+        <button onClick={clearBudget} style={styles.button}>
           LIMPIAR PRESUPUESTO
         </button>
       </div>
