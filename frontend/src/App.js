@@ -10,6 +10,7 @@ import UnitConverter from "./pages/TOOLS/Convunit";
 import Cuantif from "./pages/COSTOS/Cuantificacion";
 import Centroi from "./pages/ESTATICA/centroide";
 import Granul from "./pages/GEOTECNIA/granulome";
+import Cimsuperf from "./pages/CIMENTACION/Cimentsuperf";
 import './App.css';
 
 const styles = {
@@ -163,6 +164,21 @@ function Home() {
             </ul>
         </div>
 
+          {/* Card:CIMENTACIONES */}
+          <div style={styles.card}>
+            <img
+              src="/cimientos.png"
+              alt="CIMENTACIONES"
+              style={styles.icon}
+            />
+            <h2 style={styles.sectionTitle}>CIMENTACIONES</h2>
+            <ul style={styles.list}>
+            <li style={styles.listItem}>
+              <Link to="/ciment/superf" style={styles.link}>superficiales</Link>
+            </li>
+            </ul>
+        </div>
+
       </div>
     </div>
   );
@@ -182,6 +198,7 @@ function App() {
         <Route path="/costos/insumos" component={Cuantif} />
         <Route path="/estatica/centroid" component={Centroi} />
         <Route path="/geotecnia/Granul" component={Granul} />
+        <Route path="/ciment/superf" component={Cimsuperf} />
         {/* Agrega aquí la ruta de Topografía cuando esté lista */}
       </Switch>
     </Router>
