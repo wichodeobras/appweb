@@ -7,6 +7,9 @@ import DiseñoViga from "./pages/aceroIMCA/VIGACERO";
 import Flexacero from "./pages/aceroIMCA/flexmain";
 import Flexcompacero from "./pages/aceroIMCA/flexcompmain";
 import UnitConverter from "./pages/TOOLS/Convunit";
+import Cuantif from "./pages/COSTOS/Cuantificacion";
+import Centroi from "./pages/ESTATICA/centroide";
+import Granul from "./pages/GEOTECNIA/granulome";
 import './App.css';
 
 const styles = {
@@ -79,6 +82,42 @@ function Home() {
           </ul>
         </div>
 
+
+
+        {/* Card: Costos */}
+        <div style={styles.card}>
+          <img
+            src="/Dinero.png"
+            alt="Costos"
+            style={styles.icon}
+          />
+          <h2 style={styles.sectionTitle}>Costos</h2>
+          <ul style={styles.list}>
+            <li style={styles.listItem}>
+              <Link to="/Catal" style={styles.link}>Catálogos</Link>
+              
+            </li>
+            <li style={styles.listItem}>
+
+              <Link to="/costos/insumos" style={styles.link}>Cuantificación de materiales</Link>
+            </li>
+          </ul>
+        </div>
+        {/* Card: HERRAMIENTAS */}
+        <div style={styles.card}>
+          <img
+            src="/TOOLS.png"
+            alt="Costos"
+            style={styles.icon}
+          />
+          <h2 style={styles.sectionTitle}>Herramientas</h2>
+          <ul style={styles.list}>
+            <li style={styles.listItem}>
+              <Link to="/tools/Unit" style={styles.link}>Conversor de unidades</Link>
+            </li>
+          </ul>
+        </div>
+
         {/* Card: Topografía */}
         <div style={styles.card}>
           <img
@@ -94,33 +133,36 @@ function Home() {
           </ul>
         </div>
 
-        {/* Card: Costos */}
+        {/* Card: GEOTECNIA */}
         <div style={styles.card}>
           <img
-            src="/Dinero.png"
-            alt="Costos"
+            src="/GEOT.png"
+            alt="GEOTECNIA"
             style={styles.icon}
           />
-          <h2 style={styles.sectionTitle}>Costos</h2>
+          <h2 style={styles.sectionTitle}>GEOTECNIA</h2>
           <ul style={styles.list}>
             <li style={styles.listItem}>
-              <Link to="/Catal" style={styles.link}>Catálogos</Link>
+              <Link to="/geotecnia/Granul" style={styles.link}>Granulometría</Link>
             </li>
           </ul>
         </div>
+
+        {/* Card: ESTATICA */}
         <div style={styles.card}>
-          <img
-            src="/TOOLS.png"
-            alt="Costos"
-            style={styles.icon}
-          />
-          <h2 style={styles.sectionTitle}>Herramientas</h2>
-          <ul style={styles.list}>
+            <img
+              src="/estatica.png"
+              alt="ESTATICA"
+              style={styles.icon}
+            />
+            <h2 style={styles.sectionTitle}>ESTATICA</h2>
+            <ul style={styles.list}>
             <li style={styles.listItem}>
-              <Link to="/tools/Unit" style={styles.link}>Conversor de unidades</Link>
+              <Link to="/estatica/centroid" style={styles.link}>Centroides</Link>
             </li>
-          </ul>
+            </ul>
         </div>
+
       </div>
     </div>
   );
@@ -137,6 +179,9 @@ function App() {
         <Route path="/Catal" component={CatalogosPres} />
         <Route path="/DisVig" component={DiseñoViga} />
         <Route path="/tools/Unit" component={UnitConverter} />
+        <Route path="/costos/insumos" component={Cuantif} />
+        <Route path="/estatica/centroid" component={Centroi} />
+        <Route path="/geotecnia/Granul" component={Granul} />
         {/* Agrega aquí la ruta de Topografía cuando esté lista */}
       </Switch>
     </Router>

@@ -31,7 +31,7 @@ const ThreeViga = ({ lb, h, bf, tf, tw }) => {
       5,
       10000
     );
-    camera.position.set(-300, 0, 500);
+    camera.position.set(-500, 0, 800);
     camera.lookAt(0, 0, 0);
   
     // Renderizador
