@@ -58,11 +58,12 @@ function Flexacero() {
         <div style={styles.card}>
           <h2>PERFIL I RECTANGULAR</h2>
           <img src="/PERFILIR.png" alt="Perfil IR" style={styles.image} />        
-          <Link to="/DisVig" style={styles.link}>Diseñar este perfil</Link>
+          <Link to="/Disflex/DisIR" style={styles.link}>Diseñar este perfil</Link>
         </div>
         <div style={styles.card}>
           <h2>PERFIL I ESTANDAR</h2>
-          <img src="/PERFILIE.png" alt="Perfil IE" style={styles.image} />        
+          <img src="/PERFILIE.png" alt="Perfil IE" style={styles.image} />
+          <Link to="/Disflex/DisIE" style={styles.link}>Diseñar este perfil</Link>        
 
         </div>
         <div style={styles.card}>

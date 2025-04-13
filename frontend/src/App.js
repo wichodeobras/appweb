@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import ConsultaPerfiles from "./pages/ConsultaPerfiles";
 
 import CatalogosPres from "./pages/Catalogos";
-import DiseñoViga from "./pages/aceroIMCA/VIGACERO";
+import DisVigaRecFlex from "./pages/aceroIMCA/VIGACERO";
 import Flexacero from "./pages/aceroIMCA/flexmain";
 import Flexcompacero from "./pages/aceroIMCA/flexcompmain";
 import UnitConverter from "./pages/TOOLS/Convunit";
@@ -11,6 +11,7 @@ import Cuantif from "./pages/COSTOS/Cuantificacion";
 import Centroi from "./pages/ESTATICA/centroide";
 import Granul from "./pages/GEOTECNIA/granulome";
 import Cimsuperf from "./pages/CIMENTACION/Cimentsuperf";
+import DisVigaEstanFlex from "./pages/aceroIMCA/VIGAIE";
 import './App.css';
 
 const styles = {
@@ -193,12 +194,14 @@ function App() {
         <Route path="/Diseflex" component={Flexacero} />
         <Route path="/Diseflexoc" component={Flexcompacero} />
         <Route path="/Catal" component={CatalogosPres} />
-        <Route path="/DisVig" component={DiseñoViga} />
+        <Route path="/Disflex/DisIR" component={DisVigaRecFlex} />
+        <Route path="/Disflex/DisIE" component = {DisVigaEstanFlex} />
         <Route path="/tools/Unit" component={UnitConverter} />
         <Route path="/costos/insumos" component={Cuantif} />
         <Route path="/estatica/centroid" component={Centroi} />
         <Route path="/geotecnia/Granul" component={Granul} />
         <Route path="/ciment/superf" component={Cimsuperf} />
+        
         {/* Agrega aquí la ruta de Topografía cuando esté lista */}
       </Switch>
     </Router>

@@ -5,7 +5,7 @@ import ThreeViga from "../../graficos/ThreeViga"
 
 const BASE_URL = "https://django-backend-3vty.onrender.com";
 
-function DisVigaRecFlex() {
+function DisVigaEstanFlex() {
 
     // Materiales
     const [Fy, setFy] = useState("345");
@@ -860,4 +860,4 @@ const styles = {
         fill: "#333",
     },
 }
-export default DisVigaRecFlex;
+export default DisVigaEstanFlex;
