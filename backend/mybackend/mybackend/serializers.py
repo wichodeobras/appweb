@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import IR, HP, CE,CF, HR, IC, IE,  IRR, LD, LI   # Importa los modelos que necesites
+from .models import IR, HP, CE,CF, HR, IC, IE,  IRR, LD, LI, ORC, ORR  # Importa los modelos que necesites
 from .models import Infraestructura, SEP
 
 class IRSerializer(serializers.ModelSerializer):
@@ -51,6 +51,16 @@ class LDSerializer(serializers.ModelSerializer):
 class LISerializer(serializers.ModelSerializer):
     class Meta:
         model = LI
+        fields = '__all__'
+
+class ORCSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ORC
+        fields = '__all__'
+
+class ORRSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ORR
         fields = '__all__'
 # Define serializers para los demás modelos de forma similar
 class infraSerializer(serializers.ModelSerializer):

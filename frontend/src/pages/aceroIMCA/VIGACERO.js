@@ -537,8 +537,9 @@ function DisVigaRecFlex() {
                             </div>
                         ))}
                     </div>
-
-
+                </div>
+                <div style={styles.divv}>
+                    <button>Generar reporte</button>
                 </div>
             </section>
         </div>

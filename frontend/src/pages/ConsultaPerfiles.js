@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const BASE_URL = "https://django-backend-3vty.onrender.com";
 
-const tiposPerfil = ["IR", "HP", "CE", "CF", "HR", "IC", "IE", "IRR", "LD", "LI"];
+const tiposPerfil = ["IR", "HP", "CE", "CF", "HR", "IC", "IE", "IRR", "LD", "LI","ORC", "ORR"];
 
 function ProfileViewer() {
   const [selectedTipo, setSelectedTipo] = useState(""); //guarda el tipo de perfil seleccionado

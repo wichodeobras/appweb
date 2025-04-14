@@ -6,7 +6,7 @@ from django.http import HttpResponse  # Agregar esta importación
 from django.urls import path, include
 from rest_framework import routers
 from .views import hello_world
-from .views import IRViewSet, HPViewSet, CEViewSet, CFViewSet, HRViewSet, ICViewSet, IEViewSet, IRRViewSet, LDViewSet, LIViewSet
+from .views import IRViewSet, HPViewSet, CEViewSet, CFViewSet, HRViewSet, ICViewSet, IEViewSet, IRRViewSet, LDViewSet, LIViewSet, ORCViewSet, ORRViewSet
 from .views import infraViewSet, SEPViewSet
 
 router = routers.DefaultRouter()
@@ -20,6 +20,8 @@ router.register(r'ie', IEViewSet)
 router.register(r'irr', IRRViewSet)
 router.register(r'ld', LDViewSet)
 router.register(r'li', LIViewSet)
+router.register(r'orc', ORCViewSet)
+router.register(r'orr', ORRViewSet)
 router.register(r'infra', infraViewSet)
 router.register(r'SEP', SEPViewSet)
 # Registra los demás modelos

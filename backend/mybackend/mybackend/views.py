@@ -3,9 +3,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from rest_framework import viewsets
 import json
-from .models import IR, HP, CE,CF, HR, IC, IE,  IRR, LD, LI  # etc.
+from .models import IR, HP, CE,CF, HR, IC, IE,  IRR, LD, LI, ORC, ORR  # etc.
 from .models import Infraestructura, SEP
-from .serializers import IRSerializer, HPSerializer, CESerializer, CFSerializer, HRSerializer, ICSerializer, IESerializer,IRRSerializer, LDSerializer, LISerializer
+from .serializers import IRSerializer, HPSerializer, CESerializer, CFSerializer, HRSerializer, ICSerializer, IESerializer,IRRSerializer, LDSerializer, LISerializer, ORCSerializer, ORRSerializer
 from .serializers import infraSerializer,  SEPSerializer 
 # views.py
 
@@ -48,6 +48,14 @@ class LDViewSet(viewsets.ModelViewSet):
 class LIViewSet(viewsets.ModelViewSet):
     queryset = LI.objects.all()
     serializer_class = LISerializer
+
+class ORCViewSet(viewsets.ModelViewSet):
+    queryset = ORC.objects.all()
+    serializer_class = ORCSerializer
+
+class ORRViewSet(viewsets.ModelViewSet):
+    queryset = ORR.objects.all()
+    serializer_class = ORRSerializer
 # Crea ViewSets para los demás modelos de forma similar
 class infraViewSet(viewsets.ModelViewSet):
     queryset = Infraestructura.objects.all()
