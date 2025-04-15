@@ -1,5 +1,7 @@
 //ECUACIONES IMCA 6ta EDICION PAG. II-113
 
+
+//=========ECUACIONES PARA PERFILES I============
 export function CalcCb (Mmax, Ma, Mb, Mc) {
     return 12.5 * Mmax / (2.5 * Mmax + 3 * Ma + 4 * Mb + 3 * Mc);
 }
@@ -42,4 +44,70 @@ export function LimiteLr (E, Fy, Sx, rts, J, ho) {
     return 1.95 * rts * (E / (0.7 * Fy)) * 
            Math.sqrt((J * c / (ho * Sx)) + 
            Math.sqrt(((J * c / (ho * Sx)) ** 2) + 6.76 * ((0.7 * Fy / E) ** 2)));
+}
+
+
+//=========ECUACIONES PARA PERFILES ORR============
+export function LimiteLpORR (E, Ag, ry, J, Mp) {
+    return 0.13 * E * ry * ((Math.sqrt(J * Ag ))/Mp)
+}
+
+export function LimiteLrORR (E, Ag, ry, J, Fy, sx) {
+    return 2 * E * ry * ((Math.sqrt(J * Ag ))/(0.7 * Fy * sx))
+}
+
+
+//Pandeo General
+export function ORRMn (Fy, Zx, Lb, Lp, Lr, E, Sx, Cb, J, Ag) {
+    let Mp = Fy * Zx;
+    let Mn;
+
+    if (Lb <= Lp) {
+        Mn = Mp;
+    } else if (Lb > Lp && Lb <= Lr) {
+        Mn = Cb * (Mp - (Mp - 0.7 * Fy * Sx) * ((Lb - Lp) / (Lr - Lp)));
+    } else {
+        Mn = 2 * E * Cb * ((Math.sqrt(J*Ag))/(Lb / Lr))
+    }
+
+    if (Mn > Mp) {
+        Mn = Mp;
+    }
+
+    return Mn;
+}
+
+//Pandeo patín
+export function ORRbe (tf, E, Fy, b, ){
+    let be;
+    be = 1.92 * tf * (Math.sqrt( E / Fy)) * (1 - ((0.38 / ( b/tf ))*(Math.sqrt(E/Fy))))
+    if (be > b ){
+        be = b;
+    }
+
+    return be;
+}
+export function Se (){
+
+    return  1;
+}
+
+export function ORRMnPatin(Mp, Fy, S, b, tf, E){
+    
+}
+
+//Pandeo alma
+export function awORR (h, tw, b, tf){
+    let aw = (2 * h * tw)/(b * tf);
+    return (aw);
+}
+
+export function FcrORR (E, bf, tf){
+    let Fcr = (0.9 * E * 4 )/((bf/tf)**2)
+    return Fcr
+}
+
+export function RpgORR(aw, hc, tw, E, Fy){
+    let Rpg = 1 - ((aw/(1200+(300*aw))*((hc/tw)- (5.7 * matchMedia.sqrt(E/Fy)))))
+    return Rpg;
 }

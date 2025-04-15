@@ -12,6 +12,7 @@ import Centroi from "./pages/ESTATICA/centroide";
 import Granul from "./pages/GEOTECNIA/granulome";
 import Cimsuperf from "./pages/CIMENTACION/Cimentsuperf";
 import DisVigaEstanFlex from "./pages/aceroIMCA/VIGAIE";
+import DisVigaORRFlex from "./pages/aceroIMCA/VIGAORR";
 import './App.css';
 
 const styles = {
@@ -196,6 +197,7 @@ function App() {
         <Route path="/Catal" component={CatalogosPres} />
         <Route path="/Disflex/DisIR" component={DisVigaRecFlex} />
         <Route path="/Disflex/DisIE" component = {DisVigaEstanFlex} />
+        <Route path="/Disflex/DisORR" component = {DisVigaORRFlex} />
         <Route path="/tools/Unit" component={UnitConverter} />
         <Route path="/costos/insumos" component={Cuantif} />
         <Route path="/estatica/centroid" component={Centroi} />

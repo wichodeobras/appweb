@@ -86,6 +86,12 @@ function Flexacero() {
           <img src="/PERFILz.png" alt="Perfil Z" style={styles.image} />        
 
         </div>
+
+        <div style={styles.card}>
+          <h2>PERFIL ORR</h2>
+               
+          <Link to="/Disflex/DisORR" style={styles.link}>Diseñar este perfil</Link>
+        </div>
         
       </div>
     </div>

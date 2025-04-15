@@ -428,6 +428,10 @@ class ORC(models.Model):
     j = models.FloatField()
     c = models.FloatField()
 
+    # Dimensiones
+    d = models.FloatField(default=0.0)
+    t = models.FloatField(default=0.0)
+
 class ORR(models.Model):
     designacion_metrico = models.CharField(max_length=100)
     designacion_ingles = models.CharField(max_length=100)
@@ -464,6 +468,11 @@ class ORR(models.Model):
     # Longitudes planas
     longitud_plana_vertical = models.FloatField()
     longitud_plana_horizontal = models.FloatField()
+
+    # Dimensiones
+    d = models.FloatField(default=0.0)
+    b = models.FloatField(default=0.0)
+    t = models.FloatField(default=0.0)
 
 class OS(models.Model):
     designacion_diametro_metrico = models.CharField(max_length=50)
