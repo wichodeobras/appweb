@@ -92,7 +92,22 @@ export function Se (){
     return  1;
 }
 
-export function ORRMnPatin(Mp, Fy, S, b, tf, E){
+export function ORRMnPatin(Mp, Fy, S, b, tf, E, Clas, Se){
+    let Mn;
+    if(Clas = "Compacto"){
+        Mn = Mp;
+
+    } else if (Clas = "No compacto"){
+        Mn = Mp - ((Mp - Fy * S) * ((3.57 * (b/tf)*Math.sqrt(Fy / E))-4))
+    } else if (Clas = "Esbelto"){
+        Mn = Fy * Se;
+    } else {
+        Mn = 0
+    }
+    if (Mn > Mp){
+        Mn = Mp
+    }
+    return Mn;
     
 }
 
@@ -111,3 +126,26 @@ export function RpgORR(aw, hc, tw, E, Fy){
     let Rpg = 1 - ((aw/(1200+(300*aw))*((hc/tw)- (5.7 * matchMedia.sqrt(E/Fy)))))
     return Rpg;
 }
+
+export  function ORRMnAlma (Mp, Fy, S, h, tw, E, Clas){
+
+    let Mn;
+    if(Clas = "Compacto"){
+        Mn = Mp;
+
+    } else if (Clas = "No compacto"){
+        Mn = Mp - ((Mp - Fy * S) * ((0.305 * (h/tw)*Math.sqrt(Fy / E))-0.738))
+    } else if (Clas = "Esbelto"){
+
+        //revisar estas ecuaciones
+        Mn = 0;
+    } else {
+        Mn = 0
+    }
+    if (Mn > Mp){
+        Mn = Mp
+    }
+    return Mn;
+
+}
+

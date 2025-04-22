@@ -93,6 +93,18 @@ function Flexacero() {
           <Link to="/Disflex/DisORR" style={styles.link}>Diseñar este perfil</Link>
         </div>
         
+        <div style={styles.card}>
+          <h2>PERFIL 2CF</h2>
+               
+          <Link to="/Disflex/Dis2CF" style={styles.link}>Diseñar este perfil</Link>
+        </div>
+
+        <div style={styles.card}>
+          <h2>PERFIL C FORMADO EN FRIO (MONTEN)</h2>
+          <img src="/PERFILCF.png" alt="Perfil CF" style={styles.image} />    
+          <Link to="/Disflex/DisCF" style={styles.link}>Diseñar este perfil</Link>
+        </div>
+
       </div>
     </div>
   );

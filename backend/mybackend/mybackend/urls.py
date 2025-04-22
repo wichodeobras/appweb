@@ -8,6 +8,7 @@ from rest_framework import routers
 from .views import hello_world
 from .views import IRViewSet, HPViewSet, CEViewSet, CFViewSet, HRViewSet, ICViewSet, IEViewSet, IRRViewSet, LDViewSet, LIViewSet, ORCViewSet, ORRViewSet
 from .views import infraViewSet, SEPViewSet
+from .views import generar_reporte_cf
 
 router = routers.DefaultRouter()
 router.register(r'ir', IRViewSet)
@@ -36,8 +37,7 @@ def home(request):
 urlpatterns = [
 
     path('api/', include(router.urls)),
-
-
+    path("api/reporte-cf/", generar_reporte_cf, name="generar_reporte_cf"),
 
     path('', home, name='home'),  # Nueva ruta para "/"
     path('api/message/', hello_world),

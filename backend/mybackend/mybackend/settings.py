@@ -57,6 +57,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+
 ROOT_URLCONF = 'mybackend.urls'
 
 TEMPLATES = [
@@ -133,3 +135,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+# settings.py
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    # si luego pasas a producción, aquí tu dominio: "https://mi-sitio.com"
+]

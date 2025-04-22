@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CalcCb, calcFcr, calcrts, F2Mn, LimiteLpORR, LimiteLrORR } from "../../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroFlexión";
+import { CalcCb, calcFcr, calcrts, F2Mn, LimiteLpORR, LimiteLrORR, ORRMn, ORRMnPatin, ORRMnAlma } from "../../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroFlexión";
 import ThreeViga from "../../graficos/ThreeViga"
 
 const BASE_URL = "https://django-backend-3vty.onrender.com";
@@ -43,7 +43,10 @@ function DisVigaORRFlex() {
     const [Lr, setLr] = useState(null);
     const [Fcr, setFcr] = useState(null);
     const [Mp, setMp] = useState(null);
+    const [MnGral, setMnGral] = useState(null)
     const [Mn, setMn] = useState(null);
+    const [MnPat, setMnPat] = useState(null);
+    const [MnAlm, setMnAlm] = useState(null);
 
     //ITERACIONES
     const [iteracionesResult, setIteracionesResult] = useState([]);
@@ -92,6 +95,8 @@ function DisVigaORRFlex() {
                 d: profile.d,
                 h: profile.h,
                 bf: profile.bf,
+                b: profile.b,
+                t: profile.t_diseno,
                 tf: profile.tf,
                 tw: profile.tw,
             });
@@ -157,17 +162,27 @@ function DisVigaORRFlex() {
         setMp(profileProps.zx * 1000 * Fy)
     }, [profileProps.zx, Fy]);
 
+    //Pandeo general
     useEffect(() => {
-        setMn(F2Mn(Number(Fy), Number(profileProps.zx * 1000), Number(Lb), Number(Lp), Number(Lr), Number(Fcr), Number(profileProps.sx * 1000), Number(Cb)))
-    }, [Fy, Lb, Lp, Lr, Fcr, profileProps.zx, profileProps.sx]);
+        setMnGral(ORRMn(Fy, Number(profileProps.zx * 1000), Lb, Lp, Lr, E, Number(profileProps.sx * 1000), Cb, Number(profileProps.j * 10000), Number(profileProps.Ag * 100)))
+    }, [Fy, Lb, Lp, Lr, E, Cb, profileProps.zx, profileProps.sx, profileProps.j, profileProps.Ag]);
 
-     // ========= LIMITES =========
-     useEffect(() => {
+    //Pandeo patín
+    useEffect(() => {
+        setMnPat(ORRMnPatin(Mp, Fy, Number(profileProps.sx * 1000), Number(profileProps.b), Number(profileProps.t_diseno), E, clasificacionPatin, 0))
+    }, [Mp, Fy, profileProps.sx, profileProps.b, profileProps.t_diseno, E, clasificacionPatin]);
+
+    //Pandeo alma
+    useEffect(() => {
+        setMnPat(ORRMnAlma(Mp, Fy, Number(profileProps.sx * 1000), Number(profileProps.d) - 2 * Number(profileProps.t_diseno), Number(profileProps.t_diseno), E, clasificacionAlma))
+    }, [Mp, Fy, profileProps.sx, profileProps.d, profileProps.t_diseno, E, clasificacionAlma]);
+    // ========= LIMITES =========
+    useEffect(() => {
         setLp(LimiteLpORR(Number(E), Number(profileProps.Ag * 100), Number(profileProps.ry * 10), Number(profileProps.j * 10000), Number(Mp)))
     }, [E, profileProps.Ag, profileProps.ry, profileProps.j, Mp]);
 
     useEffect(() => {
-        setLr(LimiteLrORR(Number(E), Number(profileProps.Ag * 100), Number(profileProps.ry * 10), Number(profileProps.j * 10000), Number(Fy) , Number(profileProps.sx * 1000)))
+        setLr(LimiteLrORR(Number(E), Number(profileProps.Ag * 100), Number(profileProps.ry * 10), Number(profileProps.j * 10000), Number(Fy), Number(profileProps.sx * 1000)))
     }, [E, profileProps.Ag, profileProps.ry, profileProps.j, Fy, profileProps.sx]);
 
 
@@ -177,24 +192,61 @@ function DisVigaORRFlex() {
 
         profiles.forEach((p) => {
             try {
-                const sx = Number(p.sx) * 1000;
-                const Zx = Number(p.zx) * 1000;
-                const j = Number(p.j) * 10000;
-                const cw = Number(p.cw) * 1e6;
-                const iy = Number(p.iy) * 10000;
-                const ry = Number(p.ry) * 10;
-                const ho = Number(p.d) - Number(p.tf);
-                const rts = calcrts(iy, cw, sx);
-                const Lp_local = LimiteLpORR(Number(E), Number(profileProps.Ag * 100), Number(profileProps.ry * 10), Number(profileProps.j * 10000), Number(Mp));
-                const Lr_local = LimiteLrORR(Number(E), Number(Fy), Number(profileProps.sx * 1000), Number(rts), Number(profileProps.j * 10000), Number(ho));
-                const Fcr_local = calcFcr(Cb, Number(E), rts, Number(Lb), j, c, sx, ho);
-                const Mn_local = F2Mn(Number(Fy), Zx, Number(Lb), Lp_local, Lr_local, Fcr_local, sx, Cb);
+                // Conversiones y propiedades del perfil p:
+                const sx_local = Number(p.sx) * 1000; // cm³ a mm³ (según la fórmula)
+                const Zx_local = Number(p.zx) * 1000;  // Sección resistente
+                const j_local = Number(p.j) * 10000;   // Factor de torsión
+                const Ag = Number(p.area);
+                const ry_local = Number(p.ry) * 10;    // Factor de radio de giro
+                const d_local = Number(p.d);
+                const tf_local = Number(p.tf);
+                const ho_local = d_local - tf_local;   // Altura efectiva
+                const iy_local = Number(p.iy) * 10000;
+                const cw_local = Number(p.cw) * 1e6;
 
-                if (Mn_local/9806.65 > Number(Mmax)) {
+                // Calcular el momento plástico Mp para el perfil (según su sección resistente):
+                const Mp_local = Zx_local * Number(Fy);
+
+                // Calcular los límites Lp y Lr usando las funciones correspondientes, utilizando las propiedades del perfil
+                const Lp_local = LimiteLpORR(
+                    Number(E),
+                    Number(Ag * 100),   // se pasa en cm² a mm² si fuera el caso
+                    ry_local,
+                    j_local,
+                    Number(Mp_local)
+                );
+
+                // Calcular rts y Lr
+                const rts_local = calcrts(iy_local, cw_local, sx_local);
+                const Lr_local = LimiteLrORR(
+                    Number(E),
+                    Number(Fy),
+                    sx_local,
+                    rts_local,
+                    j_local,
+                    ho_local
+                );
+
+                // Usar la fórmula de pandeo general ORRMn para obtener la resistencia momentánea (en N·mm)
+                const Mn_local = ORRMn(
+                    Number(Fy),
+                    Zx_local,
+                    Number(Lb),         // Lb global (dato de entrada)
+                    Number(Lp_local),
+                    Number(Lr_local),
+                    Number(E),
+                    sx_local,
+                    Number(Cb),
+                    j_local,
+                    Number(Ag) * 100    // Conversión de área si es necesario (de cm² a mm²)
+                );
+
+                // Se convierte Mn_local de N·mm a kg·m (dividiendo entre 9806.65) y se verifica si supera Mmax
+                if (Mn_local / 9806.65 > Number(Mmax)) {
                     resultados.push({
                         perfil: p.designacion_mm || p.designacion_metrico || "SIN NOMBRE",
-                        Mn: Mn_local /9806.65,
-                        diferencia: Mn_local/9806.65 - Number(Mmax)
+                        Mn: Mn_local / 9806.65,
+                        diferencia: Mn_local / 9806.65 - Number(Mmax)
                     });
                 }
             } catch (error) {
@@ -202,6 +254,7 @@ function DisVigaORRFlex() {
             }
         });
 
+        // Se ordenan los resultados por la diferencia (de menor a mayor) y se toman los 3 perfiles más adecuados
         const top3 = resultados
             .sort((a, b) => a.diferencia - b.diferencia)
             .slice(0, 3);
@@ -306,14 +359,14 @@ function DisVigaORRFlex() {
                     </div>
 
                     <div style={styles.label}>
-                        <label style={styles.tit1}>h</label>
-                        <input type="number" name="h" style={styles.input} value={profileProps.h || ""} readOnly />
+                        <label style={styles.tit1}>b</label>
+                        <input type="number" name="h" style={styles.input} value={profileProps.b || ""} readOnly />
                         <label>mm</label>
                     </div>
 
                     <div style={styles.label}>
-                        <label style={styles.tit1}>tw</label>
-                        <input type="number" name="tw" style={styles.input} value={profileProps.tw || ""} readOnly />
+                        <label style={styles.tit1}>t</label>
+                        <input type="number" name="tw" style={styles.input} value={profileProps.t * 10 || ""} readOnly />
                         <label>mm</label>
                     </div>
 
@@ -460,8 +513,6 @@ function DisVigaORRFlex() {
                         <label>mm</label>
                     </div>
 
-                    <label>Pandeo general</label>
-
                     <div style={styles.label}>
                         <label style={styles.tit1}>Lp</label>
                         <input type="number" name="Lp" style={styles.inputg} value={Lp} onChange={(e) => setLp(e.target.value)} />
@@ -482,20 +533,34 @@ function DisVigaORRFlex() {
 
                     <div style={styles.label}>
                         <label style={styles.tit1}>Mp</label>
-                        <input type="number" name="Mp" style={styles.inputg} value={Mp/9806.65} onChange={(e) => setMp(e.target.value)} />
+                        <input type="number" name="Mp" style={styles.inputg} value={Mp / 9806.65} onChange={(e) => setMp(e.target.value)} />
                         <label>Kg*m</label>
                     </div>
-
+                    <label>Pandeo general</label>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Mn</label>
-                        <input type="number" name="Mn" style={styles.inputg} value={Mn/9806.65} onChange={(e) => setMn(e.target.value)} />
+                        <input type="number" name="Mn" style={styles.inputg} value={MnGral / 9806.65} onChange={(e) => setMn(e.target.value)} />
                         <label>Kg*m</label>
                     </div>
 
                     <label>Pandeo local del patin</label>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>Mn</label>
+                        <input type="number" name="Mn" style={styles.inputg} value={MnPat / 9806.65} onChange={(e) => setMn(e.target.value)} />
+                        <label>Kg*m</label>
+                    </div>
+
+                    <label>Pandeo local del alma</label>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>Mn</label>
+                        <input type="number" name="Mn" style={styles.inputg} value={MnAlm / 9806.65} onChange={(e) => setMn(e.target.value)} />
+                        <label>Kg*m</label>
+                    </div>
+
+
                 </div>
 
-               
+
 
                 <div style={styles.divv}>
                     <h2>ÁREA DE GRÁFICO</h2>
