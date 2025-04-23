@@ -1,23 +1,24 @@
-# Imagen base oficial de Python
+# Usa una imagen base ligera con python
 FROM python:3.11-slim
 
-# Instala LibreOffice y otras dependencias necesarias
-RUN apt-get update && \
-    apt-get install -y libreoffice libreoffice-writer curl && \
-    apt-get clean
+# Instala dependencias necesarias para LibreOffice
+RUN apt-get update && apt-get install -y \
+    libreoffice \
+    fonts-dejavu-core \
+    fonts-liberation \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia todos los archivos al contenedor
+# Copia los archivos de tu proyecto
 COPY . .
 
 # Instala dependencias del proyecto
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Expone el puerto por donde correrá el servidor
+# Expón el puerto para Render
 EXPOSE 8000
 
-# Comando para correr el servidor
-CMD ["gunicorn", "mybackend.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Comando para ejecutar migraciones y arrancar gunicorn
+CMD ["bash", "-c", "python manage.py migrate --noinput && gunicorn mybackend.wsgi:application --bind 0.0.0.0:8000"]

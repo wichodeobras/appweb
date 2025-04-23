@@ -6,9 +6,9 @@ services:
     plan: free
     region: oregon
     envVars:
-      - key: DATABASE_URL
-        sync: false
       - key: DJANGO_SECRET_KEY
         generateValue: true
       - key: DJANGO_ALLOWED_HOSTS
         value: django-backend.onrender.com
+      - key: DATABASE_URL
+        sync: false
