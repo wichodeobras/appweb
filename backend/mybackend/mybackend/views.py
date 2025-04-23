@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from docxtpl import DocxTemplate
 import tempfile
-from .utils import generar_pdf_desde_docx
+from .utils import generar_pdf_desde_docx, generar_pdf_desde_docxlinux
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from rest_framework import viewsets
@@ -84,7 +84,7 @@ def generar_reporte_cf(request):
 
         with tempfile.NamedTemporaryFile(suffix=".docx", delete=False) as temp_doc:
             doc.save(temp_doc.name)
-            pdf_path = generar_pdf_desde_docx(temp_doc.name)  # genera el PDF
+            pdf_path = generar_pdf_desde_docxlinux(temp_doc.name)  # genera el PDF
 
         with open(pdf_path, "rb") as f:
             response = HttpResponse(f.read(), content_type="application/pdf")
