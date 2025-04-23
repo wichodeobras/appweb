@@ -3,7 +3,8 @@ services:
     name: django-backend
     env: python
     plan: free
-    buildCommand: "pip install -r requirements.txt"
+
+    buildCommand: ./build.sh && pip install -r requirements.txt
     startCommand: "gunicorn mybackend.wsgi"
     envVars:
       - key: DJANGO_ALLOWED_HOSTS
