@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { V_Fcr, V_Vy, V_Vn } from "../../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroEnFrio";
 
 
-//const BASE_URL = "https://django-backend-3vty.onrender.com";
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://django-backend-3vty.onrender.com";
+//const BASE_URL = "http://127.0.0.1:8000";
 
 function DisVigaCFlex() {
 
