@@ -69,6 +69,7 @@ class SEPViewSet(viewsets.ModelViewSet):
     queryset = SEP.objects.all()
     serializer_class = SEPSerializer
 
+'''
 # Crear reportes
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -105,7 +106,7 @@ def generar_reporte_cf(request):
             response = HttpResponse(f.read(), content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
             response["Content-Disposition"] = 'attachment; filename=reporte_cf.docx'
             return response
-'''
+
 
 def hello_world(request):
     return JsonResponse({"message": "¡Hola desde Django!"})
