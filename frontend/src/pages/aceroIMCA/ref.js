@@ -7,7 +7,7 @@ import { V_Fcr, V_Vy, V_Vn } from "../../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/Ace
 const BASE_URL = "https://django-backend-3vty.onrender.com";
 //const BASE_URL = "http://127.0.0.1:8000";
 
-function DisVigaCFlex() {
+function iDisVigaCFlex() {
 
     // Materiales
     const [Fy, setFy] = useState("230");
@@ -510,111 +510,93 @@ function DisVigaCFlex() {
     }
 
 
-    function redondearNumeros(obj, decimales = 2) {
-        const nuevoObj = {};
-        for (const clave in obj) {
-            if (typeof obj[clave] === "number") {
-                nuevoObj[clave] = parseFloat(obj[clave].toFixed(decimales));
-            } else {
-                nuevoObj[clave] = obj[clave];
-            }
-        }
-        return nuevoObj;
-    }
-
     async function generarReporte() {
-        const datosOriginales = {
-            perfil: selectedMedida,
-            Fy,
-            E,
-            G,
-            u,
-            Phi,
-            Phiv,
-            R,
-            kv,
-            Grupo,
-            Combin,
-            FCM,
-            FCVmax,
-            FCVins,
-            FCVmed,
-            FCVV,
-            sepmont,
-            angulo,
-            claro,
-            contraf,
-            lamina,
-            CMm,
-            CVins,
-            CVmax,
-            CVmed,
-            Viento,
-            CargaDiseñox,
-            CargaDiseñoy,
-            Mmaxx,
-            Mmaxy,
-            Vmax,
-            Mnxo,
-            RMnx,
-            Rmny,
-            PhiRMnx,
-            PhiRmny,
-            Mninterac,
-            Vcr,
-            Vy,
-            lam,
-            Vn,
-            Vninter,
-            ...profileProps
+        const datos = {
+          perfil: selectedMedida,
+          Fy,
+          E,
+          G,
+          u,
+          Phi,
+          Phiv,
+          R,
+          kv,
+          Grupo,
+          Combin,
+          FCM,
+          FCVmax,
+          FCVins,
+          FCVmed,
+          FCVV,
+          sepmont,
+          angulo,
+          claro,
+          contraf,
+          lamina,
+          CMm,
+          CVins,
+          CVmax,
+          CVmed,
+          Viento,
+          CargaDiseñox,
+          CargaDiseñoy,
+          Mmaxx,
+          Mmaxy,
+          Vmax,
+          Mnxo,
+          RMnx,
+          Rmny,
+          PhiRMnx,
+          PhiRmny,
+          Mninterac,
+          Vcr,
+          Vy,
+          lam,
+          Vn,
+          Vninter,
+          ...profileProps
         };
-
-        const datos = redondearNumeros(datosOriginales, 2);
-
+      
         const response = await fetch(`${BASE_URL}/api/reporte-cf/`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(datos),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(datos),
         });
-
+      
         if (response.ok) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", "reporte_cf.docx");
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "reporte_cf.docx");
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
         } else {
-            alert("Error generando el reporte");
+          alert("Error generando el reporte");
         }
-    }
-
+      }
+      
 
 
     return (
-        <div style={styles.body}>
-            <nav style={styles.navbar}>
-                <img src="/logo.jpg" alt="Logo Nodo 0" style={styles.navbarImg} />
-                <h1 style={styles.navbarTitle}>Diseño por Flexión CF</h1>
-            </nav>
-
-            <header style={styles.header}>
-                <Link to="/Diseflex" style={styles.btnPrincipal}>Volver a Inicio</Link>
+        <div style={styles.page}>
+            <header>
+                <h1>DISEÑO POR FLEXIÓN LARGUERO CF</h1>
+                <Link to="/Diseflex">Volver a la página principal</Link>
+                <hr />
             </header>
 
             {/* Sección: Materiales y Condiciones de carga */}
-
             <section style={styles.container}>
-                <div style={styles.div}>
+                <div style={styles.divv}>
                     <h4>Materiales</h4>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Fy</label>
 
-                        <select id="Fy" value={Fy} onChange={(e) => setFy(Number(e.target.value))} style={styles.inputg}>
+                        <select id="Fy" value={Fy} onChange={(e) => setFy(Number(e.target.value))}>
                             <option value="230">230Mpa (33ksi)</option>
                             <option value="345">345Mpa (50ksi)</option>
                         </select>
@@ -646,7 +628,7 @@ function DisVigaCFlex() {
                     <h4>Tipo de estructura</h4>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Tipo</label>
-                        <select value={Grupo} onChange={(e) => setGrupo(e.target.value)} style={styles.input} >
+                        <select value={Grupo} onChange={(e) => setGrupo(e.target.value)} >
                             <option value="Grupo A">Grupo A</option>
                             <option value="Grupo B">Grupo B</option>
                         </select>
@@ -656,7 +638,7 @@ function DisVigaCFlex() {
                     <h4>Factores de carga</h4>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Combinacion</label>
-                        <select value={Combin} onChange={(e) => setCombin(e.target.value)} style={styles.inputgg}>
+                        <select value={Combin} onChange={(e) => setCombin(e.target.value)} >
                             <option value="Resistencia">Resistencia</option>
                             <option value="Viento">Viento</option>
                             <option value="Servicio">Servicio</option>
@@ -690,188 +672,188 @@ function DisVigaCFlex() {
                     </div>
                 </div>
 
-                <div style={styles.div}>
+                <div style={styles.divv}>
                     <h4>Cubierta</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Separación de monten</label>
+                        <label >Separación de monten</label>
                         <input type="number" value={sepmont} onChange={(e) => setsepmont(e.target.value)} style={styles.inputg} />
                         <label>m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Angulo de cubierta</label>
+                        <label >Angulo de cubierta</label>
                         <input type="number" value={angulo} onChange={(e) => setangulo(e.target.value)} style={styles.inputg} />
                         <label>grados</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Claro</label>
+                        <label >Claro</label>
                         <input type="number" value={claro} onChange={(e) => setclaro(e.target.value)} style={styles.inputg} />
                         <label>m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Contraflambeos</label>
-                        <select id="Fy" value={contraf} onChange={(e) => setcontraf(Number(e.target.value))} style={styles.inputg} >
+                        <label >Contraflambeos</label>
+                        <select id="Fy" value={contraf} onChange={(e) => setcontraf(Number(e.target.value))} >
                             <option value="1">1</option>
                             <option value="2">2</option>
                         </select>
                     </div>
                     <h4>Cargas</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Peso de lámina m2</label>
+                        <label >Peso de lámina m2</label>
                         <input type="number" value={lamina} onChange={(e) => setlamina(e.target.value)} style={styles.inputg} />
                         <label>kg / m2</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva instantanea</label>
-                        <input type="number" value={CVins} onChange={(e) => setCVins(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva instantanea</label>
+                        <input type="number" value={CVins} onChange={(e) => setCVins(e.target.value)} style={styles.input} />
                         <label>kg / m2</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva máxima</label>
-                        <input type="number" value={CVmax} onChange={(e) => setCVmax(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva máxima</label>
+                        <input type="number" value={CVmax} onChange={(e) => setCVmax(e.target.value)} style={styles.input} />
                         <label>kg / m2</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva media</label>
-                        <input type="number" value={CVmed} onChange={(e) => setCVmed(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva media</label>
+                        <input type="number" value={CVmed} onChange={(e) => setCVmed(e.target.value)} style={styles.input} />
                         <label>kg / m2</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viento</label>
-                        <input type="number" value={Viento} onChange={(e) => setViento(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viento</label>
+                        <input type="number" value={Viento} onChange={(e) => setViento(e.target.value)} style={styles.input} />
                         <label>kg / m2</label>
                     </div>
                     <h4>Carga lineal</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Peso de lámina</label>
+                        <label >Peso de lámina</label>
                         <input type="number" value={laminam} onChange={(e) => setlaminam(e.target.value)} style={styles.inputg} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga muerta</label>
+                        <label >Carga muerta</label>
                         <input type="number" value={CMm} onChange={(e) => setCMm(e.target.value)} style={styles.inputg} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva instantanea</label>
-                        <input type="number" value={CVinsm} onChange={(e) => setCVinsm(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva instantanea</label>
+                        <input type="number" value={CVinsm} onChange={(e) => setCVinsm(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva máxima</label>
-                        <input type="number" value={CVmaxm} onChange={(e) => setCVmaxm(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva máxima</label>
+                        <input type="number" value={CVmaxm} onChange={(e) => setCVmaxm(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva media</label>
-                        <input type="number" value={CVmedm} onChange={(e) => setCVmedm(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva media</label>
+                        <input type="number" value={CVmedm} onChange={(e) => setCVmedm(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viento</label>
-                        <input type="number" value={Vientom} onChange={(e) => setVientom(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viento</label>
+                        <input type="number" value={Vientom} onChange={(e) => setVientom(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
 
                 </div>
 
-                <div style={styles.div}>
+                <div style={styles.divv}>
                     <h4>Carga lineal en y</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga muerta</label>
+                        <label >Carga muerta</label>
                         <input type="number" value={CMmy} onChange={(e) => setCMmy(e.target.value)} style={styles.inputg} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva instantanea</label>
-                        <input type="number" value={CVinsmy} onChange={(e) => setCVinsmy(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva instantanea</label>
+                        <input type="number" value={CVinsmy} onChange={(e) => setCVinsmy(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva máxima</label>
-                        <input type="number" value={CVmaxmy} onChange={(e) => setCVmaxmy(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva máxima</label>
+                        <input type="number" value={CVmaxmy} onChange={(e) => setCVmaxmy(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva media</label>
-                        <input type="number" value={CVmedmy} onChange={(e) => setCVmedmy(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva media</label>
+                        <input type="number" value={CVmedmy} onChange={(e) => setCVmedmy(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viento</label>
-                        <input type="number" value={Vientom} onChange={(e) => setVientom(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viento</label>
+                        <input type="number" value={Vientom} onChange={(e) => setVientom(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Total</label>
-                        <input type="number" value={Totaly} onChange={(e) => setTotaly(e.target.value)} style={styles.inputg} />
+                        <label >Carga Total</label>
+                        <input type="number" value={Totaly} onChange={(e) => setTotaly(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
 
                     <h4>Carga lineal en x</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga muerta</label>
+                        <label >Carga muerta</label>
                         <input type="number" value={CMmx} onChange={(e) => setCMmx(e.target.value)} style={styles.inputg} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva instantanea</label>
-                        <input type="number" value={CVinsmx} onChange={(e) => setCVinsmx(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva instantanea</label>
+                        <input type="number" value={CVinsmx} onChange={(e) => setCVinsmx(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva máxima</label>
-                        <input type="number" value={CVmaxmx} onChange={(e) => setCVmaxmx(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva máxima</label>
+                        <input type="number" value={CVmaxmx} onChange={(e) => setCVmaxmx(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva media</label>
-                        <input type="number" value={CVmedmx} onChange={(e) => setCVmedmx(e.target.value)} style={styles.inputg} />
+                        <label >Carga Viva media</label>
+                        <input type="number" value={CVmedmx} onChange={(e) => setCVmedmx(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Total</label>
-                        <input type="number" value={Totalx} onChange={(e) => setTotalx(e.target.value)} style={styles.inputg} />
+                        <label >Carga Total</label>
+                        <input type="number" value={Totalx} onChange={(e) => setTotalx(e.target.value)} style={styles.input} />
                         <label>kg / m</label>
                     </div>
                     <h4>Combinaciones</h4>
 
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga de diseño y</label>
+                        <label >Carga de diseño y</label>
                         <input type="number" value={CargaDiseñoy} onChange={(e) => setCargaDiseñoy(e.target.value)} style={styles.input} readOnly />
                         <label>kg/m</label>
 
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga de diseño x</label>
+                        <label >Carga de diseño x</label>
                         <input type="number" value={CargaDiseñox} onChange={(e) => setCargaDiseñox(e.target.value)} style={styles.input} readOnly />
                         <label>kg/m</label>
                     </div>
-                    <button onClick={buscarCombinacionCritica} style={styles.btn}>Buscar combinación más crítica</button>
+                    <button onClick={buscarCombinacionCritica}>Buscar combinación más crítica</button>
 
                     <label>Combinación crítica: {combinacionCritica}</label>
 
                 </div>
 
-                <div style={styles.div}>
+                <div style={styles.divv}>
 
                     <h4>Simplemente apoyada</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelA}>Mxmax</label>
+                        <label style={styles.tit1}>Mxmax</label>
                         <input type="number" value={Mmaxy} onChange={(e) => setMmaxy(e.target.value)} style={styles.input} readOnly />
                         <label>kg * m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelA}>Mymax</label>
+                        <label style={styles.tit1}>Mymax</label>
                         <input type="number" value={Mmaxx} onChange={(e) => setMmaxx(e.target.value)} style={styles.input} readOnly />
                         <label>kg * m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelA}>Vmax</label>
+                        <label style={styles.tit1}>Vmax</label>
                         <input type="number" value={Vmax} onChange={(e) => setVmax(e.target.value)} style={styles.input} readOnly />
                         <label>kg</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelA}>R</label>
+                        <label style={styles.tit1}>R</label>
                         <input type="number" value={R} style={styles.input} readOnly />
 
                     </div>
@@ -887,7 +869,7 @@ function DisVigaCFlex() {
             <section style={styles.container}>
                 <div style={styles.canvas}>
                     <h4>SELEECCIONAR PEFIL</h4>
-                    <select value={selectedMedida} onChange={(e) => setSelectedMedida(e.target.value)} style={styles.select}>
+                    <select value={selectedMedida} onChange={(e) => setSelectedMedida(e.target.value)} style={styles.select} >
                         <option value="">-- Selecciona una medida --</option>
                         {profiles.map((profile) => {
                             const medida =
@@ -901,7 +883,7 @@ function DisVigaCFlex() {
                             );
                         })}
                     </select>
-                    <button onClick={handleShowProperties} style={styles.btn}> Mostrar propiedades </button>
+                    <button onClick={handleShowProperties} style={styles.button}> Mostrar propiedades </button>
                     <div >
                         <label>Previsualizacion</label>
                         <img src="/PROPCF.png" alt="propiedades de IR" style={styles.image} />
@@ -909,7 +891,7 @@ function DisVigaCFlex() {
                     </div>
                 </div>
 
-                <div style={styles.div}>
+                <div style={styles.divv}>
                     <h3>Propiedades</h3>
 
                     <div style={styles.label}>
@@ -984,7 +966,7 @@ function DisVigaCFlex() {
                 </div>
 
 
-                <div style={styles.div}>
+                <div style={styles.divv}>
                     <h3>X-X</h3>
 
                     <div style={styles.label}>
@@ -1049,7 +1031,7 @@ function DisVigaCFlex() {
                 </div>
 
 
-                <div style={styles.div}>
+                <div style={styles.divv}>
                     <div style={styles.label}>
                         <label style={styles.tit1}>J</label>
                         <input type="number" name="J" style={styles.input} value={profileProps.j || ""} readOnly />
@@ -1091,116 +1073,115 @@ function DisVigaCFlex() {
                 </div>
 
 
+                <div style={styles.divv}>
+                    <h4>Momento</h4>
+
+                    <h4>Cortante</h4>
+
+
+                </div>
             </section>
 
             {/* Cálculo */}
             <section style={styles.container}>
-                <div style={styles.div}>
+                <div style={styles.divv}>
                     <h4>Momento</h4>
                     <div style={styles.label}>
 
                         <label style={styles.tit1}>Mnxo</label>
-                        <input type="number" value={Mnxo !== null && !isNaN(Mnxo) ? Mnxo.toFixed(2) : ""} style={styles.inputg} readOnly />
+                        <input type="number" value={Mnxo !== null && !isNaN(Mnxo) ? Mnxo.toFixed(2) : ""} style={styles.input} readOnly />
                         <label>kg * m</label>
                     </div>
                     <div style={styles.label}>
                         <label style={styles.tit1}>RMnx</label>
-                        <input type="number" value={RMnx} onChange={(e) => setRMnx(e.target.value)} style={styles.inputg} readOnly />
+                        <input type="number" value={RMnx} onChange={(e) => setRMnx(e.target.value)} style={styles.input} readOnly />
                         <label>kg * m</label>
                     </div>
                     <div style={styles.label}>
                         <label style={styles.tit1}>RMny</label>
-                        <input type="number" value={Rmny} onChange={(e) => setRmny(e.target.value)} style={styles.inputg} readOnly />
+                        <input type="number" value={Rmny} onChange={(e) => setRmny(e.target.value)} style={styles.input} readOnly />
                         <label>kg * m</label>
                     </div>
                     <div style={styles.label}>
                         <label style={styles.tit1}>PhiMnx</label>
-                        <input type="number" value={PhiRMnx} onChange={(e) => setPhiRMnx(e.target.value)} style={styles.inputg} readOnly />
+                        <input type="number" value={PhiRMnx} onChange={(e) => setPhiRMnx(e.target.value)} style={styles.input} readOnly />
                         <label>kg * m</label>
                     </div>
                     <div style={styles.label}>
                         <label style={styles.tit1}>PhiMny</label>
-                        <input type="number" value={PhiRmny} onChange={(e) => setPhiRmny(e.target.value)} style={styles.inputg} readOnly />
+                        <input type="number" value={PhiRmny} onChange={(e) => setPhiRmny(e.target.value)} style={styles.input} readOnly />
                         <label>kg * m</label>
                     </div>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Interacción</label>
-                        <input type="number" value={Mninterac} onChange={(e) => setMninterac(e.target.value)} style={styles.inputg} readOnly />
-                        <label>{Vninter < 1 ? "<" : Vninter > 1 ? ">" : "="} 1</label>
+                        <input type="number" value={Mninterac} onChange={(e) => setMninterac(e.target.value)} style={styles.input} readOnly />
+                        <label>{"<"} 1 </label>
+
                     </div>
-                    {Vninter < 1 && (
-                            <label style={{ color: "green", fontWeight: "bold" }}>
-                                Perfil correcto
-                            </label>
-                        )}
-                        {Vninter > 1 && (
-                            <label style={{ color: "red", fontWeight: "bold" }}>
-                                Perfil incorrecto
-                            </label>
-                        )}
 
                 </div>
-                <div style={styles.div}>
+                <div style={styles.divv}>
                     <h4>Cortante</h4>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Fcr</label>
-                        <input type="number" style={styles.inputg} value={FcrV} readOnly />
+                        <input type="number" style={styles.input} value={FcrV} readOnly />
                         <label>m</label>
                     </div>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Vcr</label>
-                        <input type="number" value={Vcr} style={styles.inputg} readOnly />
+                        <input type="number" value={Vcr} style={styles.input} readOnly />
                         <label>kg</label>
                     </div>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Vy</label>
-                        <input type="number" value={Vy} style={styles.inputg} readOnly />
+                        <input type="number" value={Vy} style={styles.input} readOnly />
                         <label>kg</label>
                     </div>
                     <div style={styles.label}>
                         <label style={styles.tit1}>λv</label>
-                        <input type="number" value={lam} style={styles.inputg} readOnly />
+                        <input type="number" value={lam} style={styles.input} readOnly />
                     </div>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Vn</label>
-                        <input type="number" value={Vn} style={styles.inputg} readOnly />
+                        <input type="number" value={Vn} style={styles.input} readOnly />
                         <label>kg</label>
                     </div>
                     <div style={styles.label}>
                         <label style={styles.tit1}>φVn</label>
-                        <input type="number" value={Phiv * Vn} style={styles.inputg} readOnly />
+                        <input type="number" value={Phiv * Vn} style={styles.input} readOnly />
                         <label>kg</label>
                     </div>
 
 
                 </div>
-                <div style={styles.div}>
+                <div style={styles.divv}>
                     <h4>Interaccion Cortante/Momento</h4>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Interaccion</label>
-                        <input type="number" value={Vninter} style={styles.inputg} readOnly />
-                        <label>{Vninter < 1 ? "<" : Vninter > 1 ? ">" : "="} 1</label>
+                        <input type="number" value={Vninter} style={styles.input} readOnly />
+                        <label>{"<"} 1 </label>
                     </div>
-                    {Vninter < 1 && (
-                            <label style={{ color: "green", fontWeight: "bold" }}>
-                                Perfil correcto
-                            </label>
-                        )}
-                        {Vninter > 1 && (
-                            <label style={{ color: "red", fontWeight: "bold" }}>
-                                Perfil incorrecto
-                            </label>
-                        )}
+
 
                 </div>
-                
+                <div style={styles.divv}>
+                    <h4>Pandeo lateral torsional</h4>
+
+
+                </div>
+
+
+                <div style={styles.divv}>
+                    <h2>ÁREA DE GRÁFICO</h2>
+
+                </div>
             </section>
 
             {/* Iteraciones */}
             <section style={styles.container}>
-                <div style={styles.div}>
+                <div style={styles.divv}>
                     <h3>ITERACIONES</h3>
-                    <button onClick={buscarPerfilesOptimos} style={styles.btn}>
+                    <button onClick={buscarPerfilesOptimos}>
                         Buscar 3 perfiles más óptimos
                     </button>
 
@@ -1212,8 +1193,8 @@ function DisVigaCFlex() {
                         ))}
                     </ul>
                 </div>
-                <div style={styles.div}>
-                    <button onClick={generarReporte} style={styles.btn}>Generar reporte</button>
+                <div style={styles.divv}>
+                <button onClick={generarReporte}>Generar reporte</button>
 
                 </div>
             </section>
@@ -1226,41 +1207,6 @@ function DisVigaCFlex() {
 
 
 const styles = {
-    root: {
-        "--azul-oscuro": "#03045e",
-        "--azul-medio": "#0077b6",
-        "--azul-claro": "#00b4d8",
-        "--navbar": "#023e8a",
-        "--fondo": "#e6f1fc",
-        "--card-bg": "#ffffff",
-        "--borde-card": "#90e0ef",
-        "--texto": "#03045e",
-    },
-    body: {
-        margin: 0,
-        fontFamily: "'Segoe UI', sans-serif",
-        backgroundColor: "#e6f1fc",
-        color: "#03045e",
-    },
-    navbar: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "10px 20px",
-        backgroundColor: "#023e8a",
-        position: "sticky",
-        top: 0,
-        zIndex: 1000,
-    },
-    navbarImg: {
-        height: "100px",
-    },
-    navbarTitle: {
-        margin: 0,
-        fontSize: "1.5rem",
-        color: "#00b4d8",
-    },
-
     page: {
         fontFamily: "Arial, sans-serif",
         padding: "20px",
@@ -1268,12 +1214,11 @@ const styles = {
     container: {
         width: "auto",
         height: "auto",
-        padding: "15px",
+        padding: "10px",
         margin: "15px",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#fff",
         borderRadius: "8px",
-        border: "1px solid #90e0ef",
-        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
@@ -1284,15 +1229,6 @@ const styles = {
         padding: "10px",
         margin: "2px",
         border: "5px solid darkslategrey",
-        display: "flex",
-        flexDirection: "column",
-    },
-    div: {
-        width: "auto",
-        height: "auto",
-        padding: "10px",
-        margin: "2px",
-        
         display: "flex",
         flexDirection: "column",
     },
@@ -1310,48 +1246,20 @@ const styles = {
         height: "350px",
         padding: "20px",
         margin: "10px",
-        
+        border: "5px solid darkslategrey",
     },
     label: {
         padding: "5px",
-        alignItems: "center",
     },
     tit1: {
         width: "50px",
         display: "inline-block",
-        marginBottom: "4px",
-        fontWeight: "bold",
     },
-    labelA: {
-        width: "100px",
-        display: "inline-block",
-        marginBottom: "4px",
-        fontWeight: "bold",
-    },
-
     input: {
-        width: "100px",
-        padding: "8px",
-        border: "1px solid #ccc",
-        borderRadius: "6px",
+        width: "50px",
     },
     inputg: {
-        width: "70px",
-        padding: "8px",
-        border: "1px solid #ccc",
-        borderRadius: "6px",
-    },
-    inputgg: {
-        width: "120px",
-        padding: "8px",
-        border: "1px solid #ccc",
-        borderRadius: "6px",
-    },
-    select: {
-        width: "200px",
-        padding: "8px",
-        border: "1px solid #ccc",
-        borderRadius: "6px",
+        width: "70px"
     },
     image: {
         width: "100%",
@@ -1359,17 +1267,186 @@ const styles = {
         objectFit: "contain",
         marginBottom: "1rem",
     },
-    btn: {
-        marginTop: "10px",
-        padding: "10px",
-        backgroundColor: "#0077b6",
-        color: "white",
-        border: "none",
-        borderRadius: "6px",
-        cursor: "pointer",
-        width: "100%",
+    // Estilos para la gráfica SVG
+    svgGrafica: {
+        backgroundColor: "#fff",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+        marginTop: "2rem",
     },
 
+    svgCurve: {
+        fill: "none",
+        stroke: "red",
+        strokeWidth: 2,
+    },
 
+    svgAxis: {
+        stroke: "#000",
+        strokeWidth: 1,
+    },
+
+    svgPath: {
+        stroke: "#343a40", // Gris oscuro
+        strokeWidth: 2,
+        fill: "none",
+    },
+    svgLine: {
+        strokeWidth: 1.5,
+        stroke: "red",
+    },
+    svgLineBlue: {
+        stroke: "blue",
+        strokeDasharray: "4,4",
+    },
+    svgLineGreen: {
+        stroke: "green",
+        strokeDasharray: "4,4",
+    },
+    svgCircle: {
+        fill: "red",
+        stroke: "black",
+        strokeWidth: 1,
+    },
+    svgText: {
+        fontSize: "12px",
+        fontFamily: "Arial, sans-serif",
+        fill: "#333",
+    },
+    
+        root: {
+          "--azul-oscuro": "#03045e",
+          "--azul-medio": "#0077b6",
+          "--azul-claro": "#00b4d8",
+          "--navbar": "#023e8a",
+          "--fondo": "#e6f1fc",
+          "--card-bg": "#ffffff",
+          "--borde-card": "#90e0ef",
+          "--texto": "#03045e",
+        },
+        body: {
+          margin: 0,
+          fontFamily: "'Segoe UI', sans-serif",
+          backgroundColor: "var(--fondo)",
+          color: "var(--texto)",
+        },
+        navbar: {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "10px 20px",
+          backgroundColor: "var(--navbar)",
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+        },
+        navbarImg: {
+          height: "100px",
+        },
+        navbarTitle: {
+          margin: 0,
+          fontSize: "1.5rem",
+          color: "var(--azul-claro)",
+        },
+        container: {
+          maxWidth: "1400px",
+          margin: "auto",
+          padding: "20px",
+        },
+        header: {
+          textAlign: "center",
+          marginBottom: "2rem",
+        },
+        headerH1: {
+          marginBottom: "0.5rem",
+        },
+        btnPrincipal: {
+          textDecoration: "none",
+          color: "white",
+          backgroundColor: "var(--azul-claro)",
+          padding: "10px 20px",
+          borderRadius: "6px",
+        },
+        grid: {
+          display: "grid",
+          gap: "20px",
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        },
+        card: {
+          background: "var(--card-bg)",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "1px solid var(--borde-card)",
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+        },
+        cardFull: {
+          gridColumn: "span 2",
+        },
+        campo: {
+          marginBottom: "1rem",
+          display: "flex",
+          flexDirection: "column",
+        },
+        campoLabel: {
+          marginBottom: "4px",
+          fontWeight: "bold",
+        },
+        input: {
+          padding: "8px",
+          border: "1px solid #ccc",
+          borderRadius: "6px",
+        },
+        select: {
+          padding: "8px",
+          border: "1px solid #ccc",
+          borderRadius: "6px",
+        },
+        btn: {
+          marginTop: "10px",
+          padding: "10px",
+          backgroundColor: "var(--azul-medio)",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+          width: "100%",
+        },
+        resultadoP: {
+          margin: "8px 0",
+        },
+        graficaPlaceholder: {
+          height: "200px",
+          border: "2px dashed #ccc",
+          borderRadius: "8px",
+          textAlign: "center",
+          lineHeight: "200px",
+          color: "#888",
+        },
+        subtitulo: {
+          margin: "1rem 0 0.5rem",
+          fontSize: "1.1rem",
+          borderBottom: "1px solid #ddd",
+          paddingBottom: "4px",
+        },
+        containerPrincipal: {
+            fontFamily: "'Segoe UI', sans-serif",
+            backgroundColor: "var(--fondo)",
+            color: "var(--texto)",
+            minHeight: "100vh",
+          },
+          
+          campoLabel: {
+            marginBottom: "4px",
+            fontWeight: "bold",
+          },
+          
+          campoInput: {
+            padding: "8px",
+            border: "1px solid #ccc",
+            borderRadius: "6px",
+          },
+          
+      
 }
-export default DisVigaCFlex;
+export default iDisVigaCFlex;
