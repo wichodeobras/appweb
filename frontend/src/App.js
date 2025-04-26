@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import ConsultaPerfiles from "./pages/ConsultaPerfiles";
 
+import Navbar from "./componentes/Navbar";
+
 import CatalogosPres from "./pages/Catalogos";
 import DisVigaRecFlex from "./pages/aceroIMCA/VIGACERO";
 import Flexacero from "./pages/aceroIMCA/flexmain";
@@ -23,6 +25,12 @@ const styles = {
     padding: "2rem",
     backgroundColor: "#f5f5f5",
     minHeight: "100vh",
+  },
+  body: {
+    margin: 0,
+    fontFamily: "'Segoe UI', sans-serif",
+    backgroundColor: "#e6f1fc",
+    color: "#03045e",
   },
   title: {
     textAlign: "center",
@@ -68,93 +76,95 @@ const styles = {
 
 function Home() {
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Bienvenido, selecciona un servicio</h1>
-      <div style={styles.grid}>
+    <div style={styles.body}>
+      <Navbar title="BIENVENIDO, SELECCIONA UN SERVICIO" showBackLink={false} backLink="/" />
+      <div style={styles.container}>
+        
+        <div style={styles.grid}>
 
-        {/* Card: Diseño Estructural */}
-        <div style={styles.card}>
-          <img
-            src="/DISEACERO.png"
-            alt="Diseño estructural"
-            style={styles.icon}
-          />
-          <h2 style={styles.sectionTitle}>ACERO</h2>
-          <ul style={styles.list}>
-            <li style={styles.listItem}><Link to="/perfiles" style={styles.link}>Perfiles de acero</Link></li>
-            <li style={styles.listItem}><Link to="/Diseflex" style={styles.link}>Diseño por flexión</Link></li>        
-            <li style={styles.listItem}><Link to="/Diseflexoc" style={styles.link}>Diseño por flexocompresion</Link></li>
-          </ul>
-        </div>
+          {/* Card: Diseño Estructural */}
+          <div style={styles.card}>
+            <img
+              src="/DISEACERO.png"
+              alt="Diseño estructural"
+              style={styles.icon}
+            />
+            <h2 style={styles.sectionTitle}>ACERO</h2>
+            <ul style={styles.list}>
+              <li style={styles.listItem}><Link to="/perfiles" style={styles.link}>Perfiles de acero</Link></li>
+              <li style={styles.listItem}><Link to="/Diseflex" style={styles.link}>Diseño por flexión</Link></li>
+              <li style={styles.listItem}><Link to="/Diseflexoc" style={styles.link}>Diseño por flexocompresion</Link></li>
+            </ul>
+          </div>
 
 
 
-        {/* Card: Costos */}
-        <div style={styles.card}>
-          <img
-            src="/Dinero.png"
-            alt="Costos"
-            style={styles.icon}
-          />
-          <h2 style={styles.sectionTitle}>Costos</h2>
-          <ul style={styles.list}>
-            <li style={styles.listItem}>
-              <Link to="/Catal" style={styles.link}>Catálogos</Link>
-              
-            </li>
-            <li style={styles.listItem}>
+          {/* Card: Costos */}
+          <div style={styles.card}>
+            <img
+              src="/Dinero.png"
+              alt="Costos"
+              style={styles.icon}
+            />
+            <h2 style={styles.sectionTitle}>Costos</h2>
+            <ul style={styles.list}>
+              <li style={styles.listItem}>
+                <Link to="/Catal" style={styles.link}>Catálogos</Link>
 
-              <Link to="/costos/insumos" style={styles.link}>Cuantificación de materiales</Link>
-            </li>
-          </ul>
-        </div>
-        {/* Card: HERRAMIENTAS */}
-        <div style={styles.card}>
-          <img
-            src="/TOOLS.png"
-            alt="Costos"
-            style={styles.icon}
-          />
-          <h2 style={styles.sectionTitle}>Herramientas</h2>
-          <ul style={styles.list}>
-            <li style={styles.listItem}>
-              <Link to="/tools/Unit" style={styles.link}>Conversor de unidades</Link>
-            </li>
-          </ul>
-        </div>
+              </li>
+              <li style={styles.listItem}>
 
-        {/* Card: Topografía */}
-        <div style={styles.card}>
-          <img
-            src="/nivel-laser.png"
-            alt="Topografía"
-            style={styles.icon}
-          />
-          <h2 style={styles.sectionTitle}>Topografía</h2>
-          <ul style={styles.list}>
-            <li style={styles.listItem}>
-              <Link to="/top" style={styles.link}>Canvas para dibujo</Link>
-            </li>
-          </ul>
-        </div>
+                <Link to="/costos/insumos" style={styles.link}>Cuantificación de materiales</Link>
+              </li>
+            </ul>
+          </div>
+          {/* Card: HERRAMIENTAS */}
+          <div style={styles.card}>
+            <img
+              src="/TOOLS.png"
+              alt="Costos"
+              style={styles.icon}
+            />
+            <h2 style={styles.sectionTitle}>Herramientas</h2>
+            <ul style={styles.list}>
+              <li style={styles.listItem}>
+                <Link to="/tools/Unit" style={styles.link}>Conversor de unidades</Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* Card: GEOTECNIA */}
-        <div style={styles.card}>
-          <img
-            src="/GEOT.png"
-            alt="GEOTECNIA"
-            style={styles.icon}
-          />
-          <h2 style={styles.sectionTitle}>GEOTECNIA</h2>
-          <ul style={styles.list}>
-            <li style={styles.listItem}>
-              <Link to="/geotecnia/Granul" style={styles.link}>Granulometría</Link>
-            </li>
-          </ul>
-        </div>
+          {/* Card: Topografía */}
+          <div style={styles.card}>
+            <img
+              src="/nivel-laser.png"
+              alt="Topografía"
+              style={styles.icon}
+            />
+            <h2 style={styles.sectionTitle}>Topografía</h2>
+            <ul style={styles.list}>
+              <li style={styles.listItem}>
+                <Link to="/top" style={styles.link}>Canvas para dibujo</Link>
+              </li>
+            </ul>
+          </div>
 
-        {/* Card: ESTATICA */}
-        <div style={styles.card}>
+          {/* Card: GEOTECNIA */}
+          <div style={styles.card}>
+            <img
+              src="/GEOT.png"
+              alt="GEOTECNIA"
+              style={styles.icon}
+            />
+            <h2 style={styles.sectionTitle}>GEOTECNIA</h2>
+            <ul style={styles.list}>
+              <li style={styles.listItem}>
+                <Link to="/geotecnia/Granul" style={styles.link}>Granulometría</Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Card: ESTATICA */}
+          <div style={styles.card}>
             <img
               src="/estatica.png"
               alt="ESTATICA"
@@ -162,11 +172,11 @@ function Home() {
             />
             <h2 style={styles.sectionTitle}>ESTATICA</h2>
             <ul style={styles.list}>
-            <li style={styles.listItem}>
-              <Link to="/estatica/centroid" style={styles.link}>Centroides</Link>
-            </li>
+              <li style={styles.listItem}>
+                <Link to="/estatica/centroid" style={styles.link}>Centroides</Link>
+              </li>
             </ul>
-        </div>
+          </div>
 
           {/* Card:CIMENTACIONES */}
           <div style={styles.card}>
@@ -177,12 +187,24 @@ function Home() {
             />
             <h2 style={styles.sectionTitle}>CIMENTACIONES</h2>
             <ul style={styles.list}>
-            <li style={styles.listItem}>
-              <Link to="/ciment/superf" style={styles.link}>superficiales</Link>
-            </li>
+              <li style={styles.listItem}>
+                <Link to="/ciment/superf" style={styles.link}>superficiales</Link>
+              </li>
             </ul>
-        </div>
+          </div>
 
+          {/* Card:GOBIERNO */}
+          <div style={styles.card}>
+            <img
+              src="/gobierno.png"
+              alt="ADMINISTRACION PUBLICA"
+              style={styles.icon}
+            />
+            <h2 style={styles.sectionTitle}>ADMINISTRACION PUBLICA</h2>
+
+          </div>
+
+        </div>
       </div>
     </div>
   );
@@ -198,16 +220,16 @@ function App() {
         <Route path="/Diseflexoc" component={Flexcompacero} />
         <Route path="/Catal" component={CatalogosPres} />
         <Route path="/Disflex/DisIR" component={DisVigaRecFlex} />
-        <Route path="/Disflex/DisIE" component = {DisVigaEstanFlex} />
-        <Route path="/Disflex/DisORR" component = {DisVigaORRFlex} />
-        <Route path="/Disflex/DisCF" component = {DisVigaCFlex} />
-        <Route path="/Disflex/Dis2CF" component = {DisViga2CFlex} />
+        <Route path="/Disflex/DisIE" component={DisVigaEstanFlex} />
+        <Route path="/Disflex/DisORR" component={DisVigaORRFlex} />
+        <Route path="/Disflex/DisCF" component={DisVigaCFlex} />
+        <Route path="/Disflex/Dis2CF" component={DisViga2CFlex} />
         <Route path="/tools/Unit" component={UnitConverter} />
         <Route path="/costos/insumos" component={Cuantif} />
         <Route path="/estatica/centroid" component={Centroi} />
         <Route path="/geotecnia/Granul" component={Granul} />
         <Route path="/ciment/superf" component={Cimsuperf} />
-        
+
         {/* Agrega aquí la ruta de Topografía cuando esté lista */}
       </Switch>
     </Router>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import Navbar from '../../componentes/Navbar';
 
 // Definición de unidades para cada categoría con su factor de conversión (a la unidad base)
 const units = {
@@ -133,11 +134,10 @@ function UnitConverter() {
   };
 
   return (
+    <div>
+      <Navbar title="Convertidor de Unidades" showBackLink={true} backLink="/" />
     <div style={styles.container}>
-      <h1 style={styles.heading}>Convertidor de Unidades</h1>
-      <Link to="/" style={{ marginBottom: "1rem", display: "inline-block" }}>
-              Volver a la página principal
-            </Link>
+      
       {/* Selección de categoría */}
       <div>
         <label style={styles.label}>Categoría:</label>
@@ -191,6 +191,7 @@ function UnitConverter() {
           Resultado: {result}
         </div>
       )}
+    </div>
     </div>
   );
 }

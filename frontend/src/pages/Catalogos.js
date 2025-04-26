@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Boton from "../componentes/Boton";
+import Navbar from "../componentes/Navbar";
 
 const endpointMapping = {
   INFRAESTRUCTURA: "infra",
@@ -194,10 +196,10 @@ function CatalogosPres() {
   };
 
   return (
+    <div>
+      <Navbar title="Catálogo de Conceptos" showBackLink={true} backLink="/" />
     <div style={styles.container}>
-      <h1 style={styles.h1}>Catálogo de Conceptos y Presupuesto</h1>
-      <Link to="/">Volver a la página principal</Link>
-
+     
       {/* Panel de Catálogo */}
       <div style={styles.panel}>
         <h2 style={styles.catalogHeader}>Catálogos</h2>
@@ -212,9 +214,8 @@ function CatalogosPres() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button onClick={handleSearch} style={styles.button}>
-          BUSCAR
-        </button>
+        
+        <Boton onClick={handleSearch}>BUSCAR</Boton>
         <label style={styles.label} htmlFor="catalogType">
           Tipo de Catálogo:
         </label>
@@ -322,10 +323,11 @@ function CatalogosPres() {
 
           </table>
         </div>
-        <button onClick={clearBudget} style={styles.button}>
-          LIMPIAR PRESUPUESTO
-        </button>
+        
+        <Boton onClick={clearBudget}>LIMPIAR PRESUPUESTO</Boton>
+         
       </div>
+    </div>
     </div>
   );
 }

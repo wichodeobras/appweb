@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../../componentes/Navbar";
 
 const styles = {
   container: {
@@ -46,11 +47,9 @@ const styles = {
 function Flexcompacero() {
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>DISEÑO POR FLEXOCOMPRESION</h1>
+      <Navbar title="DISEÑO POR FLEXOCOMPRESION" showBackLink={true} backLink="/" />
       <h2 style={styles.title}>Selecciona un tipo de perfil para diseñar</h2>
-      <Link to="/" style={{ marginBottom: "1rem", display: "inline-block" }}>
-        Volver a la página principal
-      </Link>
+      
       <div style={styles.grid}>
         {/* Perfil IR */}
         <div style={styles.card}>

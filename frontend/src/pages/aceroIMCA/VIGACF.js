@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../../componentes/Navbar";
+import Boton from "../../componentes/Boton";
 
 import { V_Fcr, V_Vy, V_Vn } from "../../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroEnFrio";
 
@@ -597,14 +599,27 @@ function DisVigaCFlex() {
 
     return (
         <div style={styles.body}>
-            <nav style={styles.navbar}>
-                <img src="/logo.jpg" alt="Logo Nodo 0" style={styles.navbarImg} />
-                <h1 style={styles.navbarTitle}>Diseño por Flexión CF</h1>
-            </nav>
+            <Navbar title="Diseño por Flexión CF" showBackLink={true} backLink="/Diseflex" />
 
-            <header style={styles.header}>
-                <Link to="/Diseflex" style={styles.btnPrincipal}>Volver a Inicio</Link>
-            </header>
+            <section style={styles.sectionnotes}>
+            <p><i>Esta calculadora esta creada para el diseño de largueros ante esfuerzos de flexión y cortante.
+                Las combinaciones, factores de carga y la lista de perfiles fueron obtenidos del manual IMCA 6ta edición.
+                Las formulas para revisión de momento y fuerza cortante se basan en el manual AISI s100-16.
+                El valor de la carga de viento debe ser obtenido de un analisis.
+                Además se consideró lo siguiente.
+                <ul>
+                    <li><i>El larguero se idealiza como una viga simplemente apoyada con momentos positivos unicamente</i></li>
+                    <li><i>La lámina proporcioná soporte lateral, de acuerdo con AISI-s908-17, con un factor R = 0.90</i></li>
+                    <li><i>El módulo de sección efectivo de cada perfil es tomado del manual IMCA</i></li>
+                </ul>
+
+                Por lo anterior, no se considera la revisión de pandeo global torsionante, pandeo local ni distorisonal. Si el larguero
+                a revisar es continuo o en voladizo, los momentos negativos pueden llegar a ser importantes y se deberá hacer la revisión ante
+                este tipo de solicitaciones.
+                
+                </i></p>
+
+            </section>
 
             {/* Sección: Materiales y Condiciones de carga */}
 
@@ -655,7 +670,7 @@ function DisVigaCFlex() {
                     </div>
                     <h4>Factores de carga</h4>
                     <div style={styles.label}>
-                        <label style={styles.tit1}>Combinacion</label>
+                        <label style={styles.labelA}>Combinacion</label>
                         <select value={Combin} onChange={(e) => setCombin(e.target.value)} style={styles.inputgg}>
                             <option value="Resistencia">Resistencia</option>
                             <option value="Viento">Viento</option>
@@ -664,27 +679,27 @@ function DisVigaCFlex() {
                     </div>
 
                     <div style={styles.label}>
-                        <label style={styles.tit1}>FCM</label>
+                        <label style={styles.labelA}>FCM</label>
                         <input type="number" value={FCM} readOnly style={styles.inputg} />
 
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.tit1}>FCVmax</label>
+                        <label style={styles.labelA}>FCVmax</label>
                         <input type="number" value={FCVmax} readOnly style={styles.inputg} />
 
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.tit1}>FCVinst</label>
+                        <label style={styles.labelA}>FCVinst</label>
                         <input type="number" value={FCVins} readOnly style={styles.inputg} />
 
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.tit1}>FCVmed</label>
+                        <label style={styles.labelA}>FCVmed</label>
                         <input type="number" value={FCVmed} readOnly style={styles.inputg} />
 
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.tit1}>FCVV</label>
+                        <label style={styles.labelA}>FCVV</label>
                         <input type="number" value={FCVV} readOnly style={styles.inputg} />
 
                     </div>
@@ -693,22 +708,22 @@ function DisVigaCFlex() {
                 <div style={styles.div}>
                     <h4>Cubierta</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Separación de monten</label>
+                        <label style={styles.labelA}>Separación de monten</label>
                         <input type="number" value={sepmont} onChange={(e) => setsepmont(e.target.value)} style={styles.inputg} />
                         <label>m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Angulo de cubierta</label>
+                        <label style={styles.labelA}>Angulo de cubierta</label>
                         <input type="number" value={angulo} onChange={(e) => setangulo(e.target.value)} style={styles.inputg} />
                         <label>grados</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Claro</label>
+                        <label style={styles.labelA}>Claro</label>
                         <input type="number" value={claro} onChange={(e) => setclaro(e.target.value)} style={styles.inputg} />
                         <label>m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Contraflambeos</label>
+                        <label style={styles.labelA}>Contraflambeos</label>
                         <select id="Fy" value={contraf} onChange={(e) => setcontraf(Number(e.target.value))} style={styles.inputg} >
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -716,59 +731,59 @@ function DisVigaCFlex() {
                     </div>
                     <h4>Cargas</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Peso de lámina m2</label>
+                        <label style={styles.labelA}>Peso de lámina m2</label>
                         <input type="number" value={lamina} onChange={(e) => setlamina(e.target.value)} style={styles.inputg} />
                         <label>kg / m2</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva instantanea</label>
+                        <label style={styles.labelA}>Carga Viva instantanea</label>
                         <input type="number" value={CVins} onChange={(e) => setCVins(e.target.value)} style={styles.inputg} />
                         <label>kg / m2</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva máxima</label>
+                        <label style={styles.labelA}>Carga Viva máxima</label>
                         <input type="number" value={CVmax} onChange={(e) => setCVmax(e.target.value)} style={styles.inputg} />
                         <label>kg / m2</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva media</label>
+                        <label style={styles.labelA}>Carga Viva media</label>
                         <input type="number" value={CVmed} onChange={(e) => setCVmed(e.target.value)} style={styles.inputg} />
                         <label>kg / m2</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viento</label>
+                        <label style={styles.labelA}>Carga Viento</label>
                         <input type="number" value={Viento} onChange={(e) => setViento(e.target.value)} style={styles.inputg} />
                         <label>kg / m2</label>
                     </div>
                     <h4>Carga lineal</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Peso de lámina</label>
-                        <input type="number" value={laminam} onChange={(e) => setlaminam(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Peso de lámina</label>
+                        <input type="number" value={laminam} onChange={(e) => setlaminam(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga muerta</label>
-                        <input type="number" value={CMm} onChange={(e) => setCMm(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga muerta</label>
+                        <input type="number" value={CMm} onChange={(e) => setCMm(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva instantanea</label>
-                        <input type="number" value={CVinsm} onChange={(e) => setCVinsm(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viva instantanea</label>
+                        <input type="number" value={CVinsm} onChange={(e) => setCVinsm(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva máxima</label>
-                        <input type="number" value={CVmaxm} onChange={(e) => setCVmaxm(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viva máxima</label>
+                        <input type="number" value={CVmaxm} onChange={(e) => setCVmaxm(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva media</label>
-                        <input type="number" value={CVmedm} onChange={(e) => setCVmedm(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viva media</label>
+                        <input type="number" value={CVmedm} onChange={(e) => setCVmedm(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viento</label>
-                        <input type="number" value={Vientom} onChange={(e) => setVientom(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viento</label>
+                        <input type="number" value={Vientom} onChange={(e) => setVientom(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
 
@@ -777,76 +792,77 @@ function DisVigaCFlex() {
                 <div style={styles.div}>
                     <h4>Carga lineal en y</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga muerta</label>
-                        <input type="number" value={CMmy} onChange={(e) => setCMmy(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga muerta</label>
+                        <input type="number" value={CMmy} onChange={(e) => setCMmy(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva instantanea</label>
-                        <input type="number" value={CVinsmy} onChange={(e) => setCVinsmy(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viva instantanea</label>
+                        <input type="number" value={CVinsmy} onChange={(e) => setCVinsmy(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva máxima</label>
-                        <input type="number" value={CVmaxmy} onChange={(e) => setCVmaxmy(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viva máxima</label>
+                        <input type="number" value={CVmaxmy} onChange={(e) => setCVmaxmy(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva media</label>
-                        <input type="number" value={CVmedmy} onChange={(e) => setCVmedmy(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viva media</label>
+                        <input type="number" value={CVmedmy} onChange={(e) => setCVmedmy(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viento</label>
-                        <input type="number" value={Vientom} onChange={(e) => setVientom(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viento</label>
+                        <input type="number" value={Vientom} onChange={(e) => setVientom(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Total</label>
-                        <input type="number" value={Totaly} onChange={(e) => setTotaly(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Total</label>
+                        <input type="number" value={Totaly} onChange={(e) => setTotaly(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
 
                     <h4>Carga lineal en x</h4>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga muerta</label>
-                        <input type="number" value={CMmx} onChange={(e) => setCMmx(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga muerta</label>
+                        <input type="number" value={CMmx} onChange={(e) => setCMmx(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva instantanea</label>
-                        <input type="number" value={CVinsmx} onChange={(e) => setCVinsmx(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viva instantanea</label>
+                        <input type="number" value={CVinsmx} onChange={(e) => setCVinsmx(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva máxima</label>
-                        <input type="number" value={CVmaxmx} onChange={(e) => setCVmaxmx(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viva máxima</label>
+                        <input type="number" value={CVmaxmx} onChange={(e) => setCVmaxmx(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Viva media</label>
-                        <input type="number" value={CVmedmx} onChange={(e) => setCVmedmx(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Viva media</label>
+                        <input type="number" value={CVmedmx} onChange={(e) => setCVmedmx(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga Total</label>
-                        <input type="number" value={Totalx} onChange={(e) => setTotalx(e.target.value)} style={styles.inputg} />
+                        <label style={styles.labelA}>Carga Total</label>
+                        <input type="number" value={Totalx} onChange={(e) => setTotalx(e.target.value)} style={styles.inputg} readOnly/>
                         <label>kg / m</label>
                     </div>
                     <h4>Combinaciones</h4>
 
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga de diseño y</label>
+                        <label style={styles.labelA}>Carga de diseño y</label>
                         <input type="number" value={CargaDiseñoy} onChange={(e) => setCargaDiseñoy(e.target.value)} style={styles.input} readOnly />
                         <label>kg/m</label>
 
                     </div>
                     <div style={styles.label}>
-                        <label style={styles.labelB}>Carga de diseño x</label>
+                        <label style={styles.labelA}>Carga de diseño x</label>
                         <input type="number" value={CargaDiseñox} onChange={(e) => setCargaDiseñox(e.target.value)} style={styles.input} readOnly />
                         <label>kg/m</label>
                     </div>
-                    <button onClick={buscarCombinacionCritica} style={styles.btn}>Buscar combinación más crítica</button>
+                    <Boton onClick={buscarCombinacionCritica}>Buscar combinación más crítica</Boton>
+
 
                     <label>Combinación crítica: {combinacionCritica}</label>
 
@@ -901,7 +917,8 @@ function DisVigaCFlex() {
                             );
                         })}
                     </select>
-                    <button onClick={handleShowProperties} style={styles.btn}> Mostrar propiedades </button>
+                    
+                    <Boton onClick={handleShowProperties}>Cargar propiedades</Boton>
                     <div >
                         <label>Previsualizacion</label>
                         <img src="/PROPCF.png" alt="propiedades de IR" style={styles.image} />
@@ -1195,14 +1212,21 @@ function DisVigaCFlex() {
                 </div>
                 
             </section>
+            <section style={styles.sectionnotes}>
+            <p><i>La revisión ante pandeo global torsional, pandeo local y distorisonal estarán disponibles en una versión posterior
+                
+                
+                </i></p>
+
+            </section>
 
             {/* Iteraciones */}
             <section style={styles.container}>
                 <div style={styles.div}>
                     <h3>ITERACIONES</h3>
-                    <button onClick={buscarPerfilesOptimos} style={styles.btn}>
-                        Buscar 3 perfiles más óptimos
-                    </button>
+                    
+                    <Boton onClick={buscarPerfilesOptimos}>Buscar 3 perfiles más óptimos</Boton>
+                    
 
                     <ul>
                         {optimalProfiles.map(p => (
@@ -1213,8 +1237,8 @@ function DisVigaCFlex() {
                     </ul>
                 </div>
                 <div style={styles.div}>
-                    <button onClick={generarReporte} style={styles.btn}>Generar reporte</button>
-
+                    
+                    <Boton onClick={generarReporte}>Generar reporte</Boton>
                 </div>
             </section>
 
@@ -1278,6 +1302,19 @@ const styles = {
         flexDirection: "row",
         flexWrap: "wrap",
     },
+    sectionnotes: {
+        width: "auto",
+        height: "auto",
+        padding: "15px",
+        margin: "15px",
+        backgroundColor: "#ffffff",
+        borderRadius: "8px",
+        border: "1px solid #90e0ef",
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+    },
     divv: {
         width: "auto",
         height: "auto",
@@ -1323,7 +1360,7 @@ const styles = {
         fontWeight: "bold",
     },
     labelA: {
-        width: "100px",
+        width: "130px",
         display: "inline-block",
         marginBottom: "4px",
         fontWeight: "bold",
@@ -1359,16 +1396,7 @@ const styles = {
         objectFit: "contain",
         marginBottom: "1rem",
     },
-    btn: {
-        marginTop: "10px",
-        padding: "10px",
-        backgroundColor: "#0077b6",
-        color: "white",
-        border: "none",
-        borderRadius: "6px",
-        cursor: "pointer",
-        width: "100%",
-    },
+   
 
 
 }

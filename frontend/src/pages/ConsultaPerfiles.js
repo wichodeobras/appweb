@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 //import "./ConsultaPerfiles.css";
 import { Link } from "react-router-dom";
+import Navbar from "../componentes/Navbar";
+import Boton from "../componentes/Boton";
 
 
 
 const BASE_URL = "https://django-backend-3vty.onrender.com";
 
-const tiposPerfil = ["IR", "HP", "CE", "CF", "HR", "IC", "IE", "IRR", "LD", "LI","ORC", "ORR"];
+const tiposPerfil = ["IR", "HP", "CE", "CF", "HR", "IC", "IE", "IRR", "LD", "LI", "ORC", "ORR"];
 
 function ProfileViewer() {
   const [selectedTipo, setSelectedTipo] = useState(""); //guarda el tipo de perfil seleccionado
@@ -44,8 +46,8 @@ function ProfileViewer() {
     // Se busca el perfil que tenga designacion_mm igual a la clave
     const profile = profiles.find(
       (p) =>
-        (p.designacion_mm?.toLowerCase() === clave.toLowerCase() ||
-         p.designacion_metrico?.toLowerCase() === clave.toLowerCase())
+      (p.designacion_mm?.toLowerCase() === clave.toLowerCase() ||
+        p.designacion_metrico?.toLowerCase() === clave.toLowerCase())
     );
     if (profile) {
       // Se omite el id y se muestran el resto de propiedades
@@ -60,60 +62,61 @@ function ProfileViewer() {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.h1}>PERFILES IMCA</h1>
+    <div style={styles.body}>
+      <Navbar title="CATALOGO IMCA" showBackLink={true} backLink="/" />
+      <div style={styles.container}>
+        
+        <h1 style={styles.h1}>PERFILES IMCA</h1>
 
-      <Link to="/">Volver a la página principal</Link>
 
-      <label style={styles.label}>Buscar tipo y medida</label>
-      <input
-        type="text"
-        placeholder="Ej. IR 200x100x5"
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        style={styles.input}
-      />
+        <label style={styles.label}>Buscar tipo y medida</label>
+        <input
+          type="text"
+          placeholder="Ej. IR 200x100x5"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          style={styles.input}
+        />
 
-      <label style={styles.label}>Tipo de perfil</label>
-      <select
-        value={selectedTipo}
-        onChange={(e) => setSelectedTipo(e.target.value)}
-        style={styles.select}
-      >
-        <option value="">-- Selecciona un tipo --</option>
-        {tiposPerfil.map((tipo) => (
-          <option key={tipo} value={tipo}>
-            {tipo}
-          </option>
-        ))}
-      </select>
-
-      <label style={styles.label}>Medida</label>
-      <select
-        value={selectedMedida}
-        onChange={(e) => setSelectedMedida(e.target.value)}
-        style={styles.select}
-      >
-        <option value="">-- Selecciona una medida --</option>
-        {profiles.map((profile) => {
-          const medida =
-            profile.designacion_mm || profile.designacion_metrico || "Sin medida";
-          return (
-            <option key={profile.id} value={medida}>
-              {medida}
+        <label style={styles.label}>Tipo de perfil</label>
+        <select
+          value={selectedTipo}
+          onChange={(e) => setSelectedTipo(e.target.value)}
+          style={styles.select}
+        >
+          <option value="">-- Selecciona un tipo --</option>
+          {tiposPerfil.map((tipo) => (
+            <option key={tipo} value={tipo}>
+              {tipo}
             </option>
-          );
-        })}
-      </select>
+          ))}
+        </select>
+
+        <label style={styles.label}>Medida</label>
+        <select
+          value={selectedMedida}
+          onChange={(e) => setSelectedMedida(e.target.value)}
+          style={styles.select}
+        >
+          <option value="">-- Selecciona una medida --</option>
+          {profiles.map((profile) => {
+            const medida =
+              profile.designacion_mm || profile.designacion_metrico || "Sin medida";
+            return (
+              <option key={profile.id} value={medida}>
+                {medida}
+              </option>
+            );
+          })}
+        </select>
 
 
-      <button onClick={handleShowProperties} style={styles.button}>
-        Mostrar propiedades
-      </button>
+        <Boton onClick={handleShowProperties}>Mostrar propiedades</Boton>
 
-      <div style={styles.result}>
-        {profileProperties ||
-          "Aquí se mostrarán las propiedades del perfil seleccionado."}
+        <div style={styles.result}>
+          {profileProperties ||
+            "Aquí se mostrarán las propiedades del perfil seleccionado."}
+        </div>
       </div>
     </div>
   );
@@ -128,6 +131,12 @@ const styles = {
     borderRadius: "8px",
     boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
     fontFamily: "Arial, sans-serif",
+  },
+  body: {
+    margin: 0,
+    fontFamily: "'Segoe UI', sans-serif",
+    backgroundColor: "#e6f1fc",
+    color: "#03045e",
   },
   h1: {
     textAlign: "center",

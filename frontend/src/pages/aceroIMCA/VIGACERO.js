@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CalcCb, calcFcr, calcrts, F2Mn, LimiteLp, LimiteLr } from "../../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroFlexión";
+import Navbar from "../../componentes/Navbar";
+import Boton from "../../componentes/Boton";
 import ThreeViga from "../../graficos/ThreeViga"
 
 const BASE_URL = "https://django-backend-3vty.onrender.com";
@@ -221,11 +223,7 @@ function DisVigaRecFlex() {
 
     return (
         <div style={styles.page}>
-            <header>
-                <h1>DISEÑO POR FLEXIÓN VIGA IR</h1>
-                <Link to="/Diseflex">Volver a la página principal</Link>
-                <hr />
-            </header>
+            <Navbar title="Diseño por Flexión CF" showBackLink={true} backLink="/Diseflex" />
 
             {/* Sección: Materiales y Condiciones de carga */}
             <section style={styles.container}>
@@ -291,7 +289,8 @@ function DisVigaRecFlex() {
                             );
                         })}
                     </select>
-                    <button onClick={handleShowProperties} style={styles.button}> Mostrar propiedades </button>
+                    <Boton onClick={handleShowProperties}>Mostrar propiedades</Boton>
+
                     <div>
                         <label>Previsualizacion</label>
                         <ThreeViga
@@ -526,7 +525,8 @@ function DisVigaRecFlex() {
             <section style={styles.container}>
                 <div style={styles.divv}>
                     <h3>ITERACIONES</h3>
-                    <button onClick={handleIterar}>Iterar</button>
+                    
+                    <Boton onClick={handleIterar}>Iterar</Boton>
                     <div>
                         {iteracionesResult.length === 0 && (
                             <p>No hay resultados o Mn &lt; Mmax para todos los perfiles.</p>
@@ -539,7 +539,8 @@ function DisVigaRecFlex() {
                     </div>
                 </div>
                 <div style={styles.divv}>
-                    <button>Generar reporte</button>
+                <Boton >Generar reporte</Boton>
+                   
                 </div>
             </section>
         </div>
