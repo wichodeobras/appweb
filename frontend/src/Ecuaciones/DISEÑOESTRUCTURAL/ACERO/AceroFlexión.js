@@ -2,6 +2,7 @@
 
 
 //=========ECUACIONES PARA PERFILES I============
+// F2, ALMA Y PATINES COMPACTOS
 export function CalcCb (Mmax, Ma, Mb, Mc) {
     return 12.5 * Mmax / (2.5 * Mmax + 3 * Ma + 4 * Mb + 3 * Mc);
 }
@@ -46,6 +47,23 @@ export function LimiteLr (E, Fy, Sx, rts, J, ho) {
            Math.sqrt(((J * c / (ho * Sx)) ** 2) + 6.76 * ((0.7 * Fy / E) ** 2)));
 }
 
+// F3 PATINES NO COMPACTOS
+export function f3_kc (h_tw){
+    let kc;
+    return 4 / (Math.sqrt(h_tw));
+
+}
+
+export function f3_Mn (Clas ,E, kc, Sx, lambda, Mp, Fy, lambdarf, lambdapf){
+    let Mn;
+    if (Clas = "No compacto"){
+        Mn = Mp-(Mp-(0.7 * Fy * Sx)*((lambda-lambdapf)/(lambdarf-lambdapf)))
+    } else if (Clas = "Esbelto"){
+        Mn = (0.9 * E * kc * Sx)/(lambda **2);
+    } else {
+        Mn = 0;
+    }
+}
 
 //=========ECUACIONES PARA PERFILES ORR============
 export function LimiteLpORR (E, Ag, ry, J, Mp) {

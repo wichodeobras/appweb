@@ -14,7 +14,8 @@ import Centroi from "./pages/ESTATICA/centroide";
 import Granul from "./pages/GEOTECNIA/granulome";
 import Cimsuperf from "./pages/CIMENTACION/Cimentsuperf";
 import DisVigaEstanFlex from "./pages/aceroIMCA/VIGAIE";
-import DisVigaORRFlex from "./pages/aceroIMCA/VIGAORR";
+import Deflexion from "./pages/aceroIMCA/VIGAORR";
+
 import DisVigaCFlex from "./pages/aceroIMCA/VIGACF";
 import DisViga2CFlex from "./pages/aceroIMCA/VIGA2CF";
 import './App.css';
@@ -221,7 +222,7 @@ function App() {
         <Route path="/Catal" component={CatalogosPres} />
         <Route path="/Disflex/DisIR" component={DisVigaRecFlex} />
         <Route path="/Disflex/DisIE" component={DisVigaEstanFlex} />
-        <Route path="/Disflex/DisORR" component={DisVigaORRFlex} />
+        <Route path="/Disflex/DisORR" component={Deflexion} />
         <Route path="/Disflex/DisCF" component={DisVigaCFlex} />
         <Route path="/Disflex/Dis2CF" component={DisViga2CFlex} />
         <Route path="/tools/Unit" component={UnitConverter} />

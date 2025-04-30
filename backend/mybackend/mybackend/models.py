@@ -46,6 +46,7 @@ class HP(models.Model):
     j = models.FloatField()
     cw = models.FloatField()
 
+    
 class CE(models.Model):
     
     designacion_mm = models.CharField(max_length=50)
@@ -165,6 +166,9 @@ class HR(models.Model):
     j = models.FloatField()
     cw = models.FloatField()
 
+    # Peso
+    peso = models.FloatField(null=True, blank=True)
+
 class IC(models.Model):
     designacion_metrico = models.CharField(max_length=50)
     designacion_ingles = models.CharField(max_length=50)
@@ -259,6 +263,9 @@ class IE(models.Model):
     j = models.FloatField()
     cw = models.FloatField()
 
+    # Peso
+    peso = models.FloatField(null=True, blank=True)
+
 class IRR(models.Model):
     designacion_metrico = models.CharField(max_length=50)
     designacion_ingles = models.CharField(max_length=50)
@@ -308,6 +315,9 @@ class IRR(models.Model):
     # Torsión
     j = models.FloatField()
     cw = models.FloatField()
+
+    # Peso
+    peso = models.FloatField(null=True, blank=True)
 
 class LD(models.Model):
     designacion_metrico = models.CharField(max_length=100)

@@ -103,8 +103,8 @@ function Flexacero() {
           </div>
 
           <div style={styles.card}>
-            <h2>PERFIL ORR</h2>
-            <BotonLink to="/Disflex/DisORR">Diseñar este perfil</BotonLink>
+            <h2>DEFLEXIONES</h2>
+            <BotonLink to="/Disflex/DisORR">Revisar</BotonLink>
 
           </div>
 
