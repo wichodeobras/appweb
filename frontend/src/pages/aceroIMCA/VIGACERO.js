@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CalcCb, calcFcr, calcrts, F2Mn, LimiteLp, LimiteLr } from "../../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroFlexión";
+import { calcFcr, calcrts, F2Mn, LimiteLp, LimiteLr, f3_kc, f3_Mn } from "../../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroFlexión";
 import Navbar from "../../componentes/Navbar";
 import Boton from "../../componentes/Boton";
 import ThreeViga from "../../graficos/ThreeViga"
@@ -14,17 +14,17 @@ function DisVigaRecFlex() {
     const [E, setE] = useState("200000");
 
     // Condiciones de Carga
-    const [Mmax, setMmax] = useState("7963");
-    const [Ma, setMa] = useState("5972");
-    const [Mb, setMb] = useState("7963");
-    const [Mc, setMc] = useState("5972");
-    const [Cb, setCb] = useState(null);
+    const [Mmax, setMmax] = useState("1760");
+    const [Mmaxadd, setMmaxadd] = useState(null);
+    const [Cb, setCb] = useState("1.00");
 
     //
     const [ho, setho] = useState(null);
     const [rts, setrts] = useState(null);
 
     const c = 1;
+    const phib = 0.90;
+    const phiv = 0.90;
 
     // Perfiles y selección
     const [profiles, setProfiles] = useState([]);
@@ -36,16 +36,30 @@ function DisVigaRecFlex() {
     // Clasificaciones
     const [clasificacionPatin, setClasificacionPatin] = useState("");
     const [clasificacionAlma, setClasificacionAlma] = useState("");
-    //const [rango, setRango] = useState("")
+
+    //Patin y alma
+    const [PatLambdap, setPatlambdap] = useState(null);
+    const [PatLambdar, setPatlambdar] = useState(null);
+    const [AlmLambdap, setAlmlambdap] = useState(null);
+    const [AlmLambdar, setAlmlambdar] = useState(null);
+
+    //cortante
+    const [Aw, setAw]= useState(null);
+    const Cvl = 1;
+    const [Vn, setVn] = useState(null);
 
 
     //Cálculos
-    const [Lb, setLb] = useState("8000");
+    const [claro, setClaro] = useState("9000");
+    const [Lb, setLb] = useState("9000");
     const [Lp, setLp] = useState(null);
     const [Lr, setLr] = useState(null);
     const [Fcr, setFcr] = useState(null);
     const [Mp, setMp] = useState(null);
     const [Mn, setMn] = useState(null);
+    const [f3Mn, setf3Mn] = useState(null);
+    const [kc, setkc] = useState(null);
+
 
     //ITERACIONES
     const [iteracionesResult, setIteracionesResult] = useState([]);
@@ -96,6 +110,7 @@ function DisVigaRecFlex() {
                 bf: profile.bf,
                 tf: profile.tf,
                 tw: profile.tw,
+                peso: profile.peso,
             });
         } else {
             setProfileProps({});
@@ -129,6 +144,10 @@ function DisVigaRecFlex() {
         const lambda = b_2tf;
         const lambdap = 0.38 * Math.sqrt(E / Fy);
         const lambdar = Math.sqrt(E / Fy);
+
+        setPatlambdap(lambdap);
+        setPatlambdar(lambdar);
+
         if (lambda < lambdap) return "Compacto";
         if (lambda >= lambdap && lambda <= lambdar) return "No compacto";
         if (lambda > lambdar) return "Esbelto";
@@ -139,16 +158,20 @@ function DisVigaRecFlex() {
         const lambda = h_tw;
         const lambdap = 3.76 * Math.sqrt(E / Fy);
         const lambdar = 5.7 * Math.sqrt(E / Fy);
+
+        setAlmlambdap(lambdap);
+        setAlmlambdar(lambdar);
+
         if (lambda < lambdap) return "Compacto";
         if (lambda >= lambdap && lambda <= lambdar) return "No compacto";
         if (lambda > lambdar) return "Esbelto";
         return "Clasificación desconocida";
     };
 
-    // ========= Cb =========
-    useEffect(() => {
-        setCb(CalcCb(Number(Mmax), Number(Ma), Number(Mb), Number(Mc)))
-    }, [Mmax, Ma, Mb, Mc]);
+
+    // ========= CLASIFICACIONES =========
+    
+
 
     // ========= RTS y ho =========
     useEffect(() => {
@@ -181,6 +204,23 @@ function DisVigaRecFlex() {
         setMn(F2Mn(Number(Fy), Number(profileProps.zx * 1000), Number(Lb), Number(Lp), Number(Lr), Number(Fcr), Number(profileProps.sx * 1000), Number(Cb)))
     }, [Fy, Lb, Lp, Lr, Fcr, profileProps.zx, profileProps.sx]);
 
+    useEffect(() => {
+        setkc(f3_kc(Number(profileProps.h_tw)))
+    }, [profileProps.h_tw]);
+
+    useEffect(() => {
+        setf3Mn(f3_Mn(clasificacionPatin, E, kc, Number(profileProps.sx*1000), Number(profileProps.b_2tf), Mp, Fy, PatLambdar, PatLambdap))
+    }, [clasificacionPatin, E, kc, profileProps.sx, profileProps.b_2tf, Mp, Fy, PatLambdar, PatLambdap]);
+
+    //=======CORTANTE==========
+    useEffect(()=>{
+        setAw(Number(profileProps.d) * Number(profileProps.tw))
+    },[profileProps]);
+
+    useEffect(()=>{
+        setVn( 0.6 * Fy * Aw * Cvl)
+    },[Fy, Aw, Cvl]);
+
     // ========= ITERACIONES =========
     const handleIterar = () => {
         const resultados = [];
@@ -200,11 +240,11 @@ function DisVigaRecFlex() {
                 const Fcr_local = calcFcr(Cb, Number(E), rts, Number(Lb), j, c, sx, ho);
                 const Mn_local = F2Mn(Number(Fy), Zx, Number(Lb), Lp_local, Lr_local, Fcr_local, sx, Cb);
 
-                if (Mn_local/9806.65 > Number(Mmax)) {
+                if (Mn_local / 9806.65 > Number(Mmax)) {
                     resultados.push({
                         perfil: p.designacion_mm || p.designacion_metrico || "SIN NOMBRE",
-                        Mn: Mn_local /9806.65,
-                        diferencia: Mn_local/9806.65 - Number(Mmax)
+                        Mn: Mn_local / 9806.65,
+                        diferencia: Mn_local / 9806.65 - Number(Mmax)
                     });
                 }
             } catch (error) {
@@ -248,24 +288,17 @@ function DisVigaRecFlex() {
                         <input type="number" name="Mmax" style={styles.input} value={Mmax} onChange={(e) => setMmax(e.target.value)} />
                         <label>kg * m</label>
                     </div>
+
                     <div style={styles.label}>
-                        <label style={styles.tit1}>Ma</label>
-                        <input type="number" name="Ma" style={styles.input} value={Ma} onChange={(e) => setMa(e.target.value)} />
-                        <label>kg * m</label>
+                        <label style={styles.tit1}>Claro</label>
+                        <input type="number" style={styles.input} value={claro} onChange={(e) => setClaro(e.target.value)} />
+                        <label>mm</label>
                     </div>
-                    <div style={styles.label}>
-                        <label style={styles.tit1}>Mb</label>
-                        <input type="number" name="Mb" style={styles.input} value={Mb} onChange={(e) => setMb(e.target.value)} />
-                        <label>kg * m</label>
-                    </div>
-                    <div style={styles.label}>
-                        <label style={styles.tit1}>Mc</label>
-                        <input type="number" name="Mc" style={styles.input} value={Mc} onChange={(e) => setMc(e.target.value)} />
-                        <label>kg * m</label>
-                    </div>
+
                     <div style={styles.label}>
                         <label style={styles.tit1}>Cb</label>
-                        <label style={styles.tit1}>{Cb}</label>
+                        <input type="number" style={styles.input} value={Cb} onChange={(e) => setCb(e.target.value)} />
+
                     </div>
                 </div>
             </section>
@@ -341,10 +374,15 @@ function DisVigaRecFlex() {
                         <input type="number" name="area" style={styles.input} value={profileProps.Ag || ""} readOnly />
                         <label>cm²</label>
                     </div>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>Aw</label>
+                        <input type="number" name="area" style={styles.input} value={Aw} readOnly />
+                        <label>mm²</label>
+                    </div>
 
                     <div style={styles.label}>
                         <label style={styles.tit1}>peso</label>
-                        <input type="number" name="peso" style={styles.input} value={""} readOnly />
+                        <input type="number" name="peso" style={styles.input} value={profileProps.peso} readOnly />
                         <label>kg/m</label>
                     </div>
 
@@ -356,6 +394,10 @@ function DisVigaRecFlex() {
                     <div style={styles.label}>
                         <label style={styles.tit1}>h/tw</label>
                         <input type="number" name="htw" style={styles.input} value={profileProps.h_tw || ""} readOnly />
+                    </div>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>kc</label>
+                        <input type="number" style={styles.input} value={kc} readOnly />
                     </div>
                 </div>
 
@@ -447,6 +489,30 @@ function DisVigaRecFlex() {
                         <label style={styles.tit1}>Patín</label>
                         <label>{clasificacionPatin}</label>
                     </div>
+                    <h3>Patín</h3>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>λp</label>
+                        <label>{PatLambdap?.toFixed(2)}</label>
+                    </div>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>λr</label>
+                        <label>{PatLambdar?.toFixed(2)}</label>
+                    </div>
+                    <h3>Alma</h3>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>λp</label>
+                        <label>{AlmLambdap?.toFixed(2)}</label>
+                    </div>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>λr</label>
+                        <label>{AlmLambdar?.toFixed(2)}</label>
+                    </div>
+
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>Cvl</label>
+                        <label>1</label>
+                    </div>
+
                 </div>
 
 
@@ -471,33 +537,54 @@ function DisVigaRecFlex() {
 
                     <div style={styles.label}>
                         <label style={styles.tit1}>Lp</label>
-                        <input type="number" name="Lp" style={styles.inputg} value={Lp} onChange={(e) => setLp(e.target.value)} />
+                        <input type="number" name="Lp" style={styles.inputg} value={Lp}  readOnly/>
                         <label>mm</label>
                     </div>
 
                     <div style={styles.label}>
                         <label style={styles.tit1}>Lr</label>
-                        <input type="number" name="Lr" style={styles.inputg} value={Lr} onChange={(e) => setLr(e.target.value)} />
+                        <input type="number" name="Lr" style={styles.inputg} value={Lr}  readOnly/>
                         <label>mm</label>
                     </div>
 
-                    <div style={styles.label}>
-                        <label style={styles.tit1}>Fcr</label>
-                        <input type="number" name="Fcr" style={styles.inputg} value={Fcr} onChange={(e) => setFcr(e.target.value)} />
-                        <label>Mpa</label>
-                    </div>
 
+                    <label>Fluencia</label>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Mp</label>
-                        <input type="number" name="Mp" style={styles.inputg} value={Mp/9806.65} onChange={(e) => setMp(e.target.value)} />
+                        <input type="number" name="Mp" style={styles.inputg} value={Mp / 9806.65}  readOnly/>
+                        <label>Kg*m</label>
+                    </div>
+                    <label>Pandeo lateral torsional</label>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>Fcr</label>
+                        <input type="number" name="Fcr" style={styles.inputg} value={Fcr}  readOnly/>
+                        <label>Mpa</label>
+                    </div>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>Mn</label>
+                        <input type="number" name="Mn" style={styles.inputg} value={Mn / 9806.65}  readOnly/>
+                        <label>Kg*m</label>
+                    </div>
+                    <label>Pandeo local del patin</label>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>Mn</label>
+                        <input type="number" name="Mn" style={styles.inputg} value={f3Mn / 9806.65} readOnly />
                         <label>Kg*m</label>
                     </div>
 
+                    <h3>Cortante</h3>
                     <div style={styles.label}>
-                        <label style={styles.tit1}>Mn</label>
-                        <input type="number" name="Mn" style={styles.inputg} value={Mn/9806.65} onChange={(e) => setMn(e.target.value)} />
-                        <label>Kg*m</label>
+                        <label style={styles.tit1}>Vn</label>
+                        <input type="number" name="Vn" style={styles.inputg} value={Vn/9.80665} readOnly/>
+                        <label>Kg</label>
                     </div>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>φVn</label>
+                        <input type="number" name="Vn" style={styles.inputg} value={(Vn/9.80665)*phiv} readOnly/>
+                        <label>Kg</label>
+                    </div>
+
+
                 </div>
 
 
@@ -525,7 +612,7 @@ function DisVigaRecFlex() {
             <section style={styles.container}>
                 <div style={styles.divv}>
                     <h3>ITERACIONES</h3>
-                    
+
                     <Boton onClick={handleIterar}>Iterar</Boton>
                     <div>
                         {iteracionesResult.length === 0 && (
@@ -539,8 +626,8 @@ function DisVigaRecFlex() {
                     </div>
                 </div>
                 <div style={styles.divv}>
-                <Boton >Generar reporte</Boton>
-                   
+                    <Boton >Generar reporte</Boton>
+
                 </div>
             </section>
         </div>

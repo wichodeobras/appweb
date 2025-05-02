@@ -50,8 +50,9 @@ export function LimiteLr (E, Fy, Sx, rts, J, ho) {
 // F3 PATINES NO COMPACTOS
 export function f3_kc (h_tw){
     let kc;
-    return 4 / (Math.sqrt(h_tw));
 
+    kc = 4 / (Math.sqrt(h_tw));
+     return kc;
 }
 
 export function f3_Mn (Clas ,E, kc, Sx, lambda, Mp, Fy, lambdarf, lambdapf){
@@ -63,6 +64,7 @@ export function f3_Mn (Clas ,E, kc, Sx, lambda, Mp, Fy, lambdarf, lambdapf){
     } else {
         Mn = 0;
     }
+    return Mn
 }
 
 //=========ECUACIONES PARA PERFILES ORR============
