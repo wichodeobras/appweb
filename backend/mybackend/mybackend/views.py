@@ -10,8 +10,31 @@ import json
 from .models import IR, HP, CE,CF, HR, IC, IE,  IRR, LD, LI, ORC, ORR  # etc.
 from .models import Infraestructura, SEP
 from .serializers import IRSerializer, HPSerializer, CESerializer, CFSerializer, HRSerializer, ICSerializer, IESerializer,IRRSerializer, LDSerializer, LISerializer, ORCSerializer, ORRSerializer
-from .serializers import infraSerializer,  SEPSerializer 
+from .serializers import infraSerializer,  SEPSerializer
+from .serializers import CAL_ARENASerializer, MORTERO_ARENASerializer, CEMENTO_ARENASerializer, CEMENTO_ARENA_CERNIDASerializer, CEMENTO_CALHIDRA_ARENASerializer
+from .models import CAL_ARENA, MORTERO_ARENA, CEMENTO_ARENA, CEMENTO_ARENA_CERNIDA, CEMENTO_CALHIDRA_ARENA
 # views.py
+
+class CAL_ARENAViewSet(viewsets.ModelViewSet):
+    queryset = CAL_ARENA.objects.all()
+    serializer_class = CAL_ARENASerializer
+
+class MORTERO_ARENAViewSet(viewsets.ModelViewSet):
+    queryset = MORTERO_ARENA.objects.all()
+    serializer_class = MORTERO_ARENASerializer
+
+class CEMENTO_ARENAViewSet(viewsets.ModelViewSet):
+    queryset = CEMENTO_ARENA.objects.all()
+    serializer_class = CEMENTO_ARENASerializer
+
+class CEMENTO_ARENA_CERNIDAViewSet(viewsets.ModelViewSet):
+    queryset = CEMENTO_ARENA_CERNIDA.objects.all()
+    serializer_class = CEMENTO_ARENA_CERNIDASerializer
+
+class CEMENTO_CALHIDRA_ARENAViewSet(viewsets.ModelViewSet):
+    queryset = CEMENTO_CALHIDRA_ARENA.objects.all()
+    serializer_class = CEMENTO_CALHIDRA_ARENASerializer
+
 
 class IRViewSet(viewsets.ModelViewSet):
     queryset = IR.objects.all()

@@ -1,7 +1,6 @@
 // Homeacero.js
-
 import React from "react";
-import { Link } from "react-router-dom";
+
 import Navbar from "../../componentes/Navbar";
 import BotonLink from "../../componentes/BotonLink";
 

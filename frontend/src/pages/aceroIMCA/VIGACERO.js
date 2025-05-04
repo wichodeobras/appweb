@@ -1,9 +1,9 @@
-import React, { use, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { calcFcr, calcrts, F2Mn, LimiteLp, LimiteLr, f3_kc, f3_Mn } from "../../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroFlexión";
+import React, { useEffect, useState } from "react";
+import { calcFcr, calcrts, F2Mn, LimiteLp, LimiteLr, f3_kc, f3_Mn, MomentoResistente } from "../../Ecuaciones/DISEÑOESTRUCTURAL/ACERO/AceroFlexión";
 import Navbar from "../../componentes/Navbar";
 import Boton from "../../componentes/Boton";
-import ThreeViga from "../../graficos/ThreeViga"
+import ThreeViga from "../../graficos/ThreeViga";
+import GraficaMn from "../../graficos/GraficaMn";
 
 const BASE_URL = "https://django-backend-3vty.onrender.com";
 
@@ -15,10 +15,10 @@ function DisVigaRecFlex() {
 
     // Condiciones de Carga
     const [Mmax, setMmax] = useState("1760");
-    const [Mmaxadd, setMmaxadd] = useState(null);
     const [Cb, setCb] = useState("1.00");
 
-    //
+    //Propiedades  de perfil
+    const [profileProps, setProfileProps] = useState({});
     const [ho, setho] = useState(null);
     const [rts, setrts] = useState(null);
 
@@ -29,9 +29,6 @@ function DisVigaRecFlex() {
     // Perfiles y selección
     const [profiles, setProfiles] = useState([]);
     const [selectedMedida, setSelectedMedida] = useState("");
-
-    // Propiedades del perfil seleccionado (agrupadas en un objeto)
-    const [profileProps, setProfileProps] = useState({});
 
     // Clasificaciones
     const [clasificacionPatin, setClasificacionPatin] = useState("");
@@ -49,16 +46,27 @@ function DisVigaRecFlex() {
     const [Vn, setVn] = useState(null);
 
 
-    //Cálculos
-    const [claro, setClaro] = useState("9000");
-    const [Lb, setLb] = useState("9000");
+    //Condiciones de frontera
+    const [claro, setClaro] = useState("5000");
+    const [Lb, setLb] = useState("1000");
     const [Lp, setLp] = useState(null);
     const [Lr, setLr] = useState(null);
-    const [Fcr, setFcr] = useState(null);
+
+
+
+    //Fluencia
     const [Mp, setMp] = useState(null);
+
+    //Pandeo lateral torsional
+    const [Fcr, setFcr] = useState(null);
     const [Mn, setMn] = useState(null);
+
+    //Pandeo local patín de en compresión
     const [f3Mn, setf3Mn] = useState(null);
     const [kc, setkc] = useState(null);
+
+    //Momento resistente
+    const [MnR, setMnR] = useState(null);
 
 
     //ITERACIONES
@@ -117,23 +125,49 @@ function DisVigaRecFlex() {
         }
     };
 
+    // 1️⃣ Handlers para anterior / siguiente
+  const handlePrevProfile = () => {
+    const idx = profiles.findIndex(p => {
+      const m = selectedMedida.toLowerCase();
+      return p.designacion_mm?.toLowerCase() === m
+          || p.designacion_metrico?.toLowerCase() === m;
+    });
+    if (idx > 0) {
+      const prev = profiles[idx - 1];
+      const medida = prev.designacion_mm || prev.designacion_metrico;
+      setSelectedMedida(medida);
+    }
+  };
+
+  const handleNextProfile = () => {
+    const idx = profiles.findIndex(p => {
+      const m = selectedMedida.toLowerCase();
+      return p.designacion_mm?.toLowerCase() === m
+          || p.designacion_metrico?.toLowerCase() === m;
+    });
+    if (idx >= 0 && idx < profiles.length - 1) {
+      const next = profiles[idx + 1];
+      const medida = next.designacion_mm || next.designacion_metrico;
+      setSelectedMedida(medida);
+    }
+  };
+
+  // 2️⃣ Automáticamente recargar propiedades al cambiar selectedMedida
+  useEffect(() => {
+    if (selectedMedida) {
+      handleShowProperties();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMedida]);
+
+
     // ========= CLASIFICACIONES =========
     useEffect(() => {
         if (E && Fy && profileProps.b_2tf && profileProps.h_tw) {
             setClasificacionPatin(
-                ClasificacionPatin(
-                    Number(profileProps.b_2tf),
-                    Number(E),
-                    Number(Fy)
-                )
-            );
+                ClasificacionPatin(Number(profileProps.b_2tf), Number(E), Number(Fy) ));
             setClasificacionAlma(
-                ClasificacionAlma(
-                    Number(profileProps.h_tw),
-                    Number(E),
-                    Number(Fy)
-                )
-            );
+                ClasificacionAlma( Number(profileProps.h_tw), Number(E), Number(Fy) ));
         } else {
             setClasificacionPatin("");
             setClasificacionAlma("");
@@ -168,11 +202,6 @@ function DisVigaRecFlex() {
         return "Clasificación desconocida";
     };
 
-
-    // ========= CLASIFICACIONES =========
-    
-
-
     // ========= RTS y ho =========
     useEffect(() => {
         setrts(calcrts(Number(profileProps.iy * 10000), Number(profileProps.cw * 1000000), Number(profileProps.sx * 1000)))
@@ -191,26 +220,38 @@ function DisVigaRecFlex() {
         setLr(LimiteLr(Number(E), Number(Fy), Number(profileProps.sx * 1000), Number(rts), Number(profileProps.j * 10000), Number(ho)))
     }, [E, Fy, rts, ho]);
 
-    // ========= RESISTENCIA =========
+    // ========= RESISTENCIA A FLEXION =========
+
+    //Fluencia 
+    useEffect(() => {
+        setMp(profileProps.zx * 1000 * Fy)
+    }, [profileProps.zx, Fy]);
+
+
+    //Pandeo lateral torsional
     useEffect(() => {
         setFcr(calcFcr(Number(Cb), Number(E), Number(rts), Number(Lb), Number(profileProps.j * 10000), Number(c), Number(profileProps.sx * 1000), Number(ho)))
     }, [Cb, E, rts, Lb, c, ho, profileProps.j, profileProps.sx]);
 
-    useEffect(() => {
-        setMp(profileProps.zx * 1000 * Fy)
-    }, [profileProps.zx, Fy]);
 
     useEffect(() => {
         setMn(F2Mn(Number(Fy), Number(profileProps.zx * 1000), Number(Lb), Number(Lp), Number(Lr), Number(Fcr), Number(profileProps.sx * 1000), Number(Cb)))
     }, [Fy, Lb, Lp, Lr, Fcr, profileProps.zx, profileProps.sx]);
 
+    //Pandeo local del patin en compresion
     useEffect(() => {
         setkc(f3_kc(Number(profileProps.h_tw)))
     }, [profileProps.h_tw]);
 
     useEffect(() => {
-        setf3Mn(f3_Mn(clasificacionPatin, E, kc, Number(profileProps.sx*1000), Number(profileProps.b_2tf), Mp, Fy, PatLambdar, PatLambdap))
+        setf3Mn(f3_Mn( clasificacionPatin, E, kc, Number(profileProps.sx * 1000), Number(profileProps.b_2tf), Mp, Fy, PatLambdap, PatLambdar));        
     }, [clasificacionPatin, E, kc, profileProps.sx, profileProps.b_2tf, Mp, Fy, PatLambdar, PatLambdap]);
+
+    //Momento resistente
+    useEffect(()=>{
+        setMnR(MomentoResistente(clasificacionPatin, Mn, f3Mn))
+    },[clasificacionPatin, Mn, f3Mn]);
+
 
     //=======CORTANTE==========
     useEffect(()=>{
@@ -224,40 +265,58 @@ function DisVigaRecFlex() {
     // ========= ITERACIONES =========
     const handleIterar = () => {
         const resultados = [];
-
+    
         profiles.forEach((p) => {
             try {
                 const sx = Number(p.sx) * 1000;
-                const Zx = Number(p.zx) * 1000;
+                const zx = Number(p.zx) * 1000;
                 const j = Number(p.j) * 10000;
                 const cw = Number(p.cw) * 1e6;
                 const iy = Number(p.iy) * 10000;
                 const ry = Number(p.ry) * 10;
                 const ho = Number(p.d) - Number(p.tf);
+                const b_2tf = Number(p.b_2tf);
+                const h_tw = Number(p.h_tw);
+    
                 const rts = calcrts(iy, cw, sx);
                 const Lp_local = LimiteLp(Number(E), Number(Fy), ry);
                 const Lr_local = LimiteLr(Number(E), Number(Fy), sx, rts, j, ho);
-                const Fcr_local = calcFcr(Cb, Number(E), rts, Number(Lb), j, c, sx, ho);
-                const Mn_local = F2Mn(Number(Fy), Zx, Number(Lb), Lp_local, Lr_local, Fcr_local, sx, Cb);
-
-                if (Mn_local / 9806.65 > Number(Mmax)) {
+                const Fcr_local = calcFcr(Number(Cb), Number(E), rts, Number(Lb), j, c, sx, ho);
+                const f2Mn = F2Mn(Number(Fy), zx, Number(Lb), Lp_local, Lr_local, Fcr_local, sx, Number(Cb));
+                const kc = f3_kc(h_tw);
+    
+                // Clasificación local para cada iteración
+                const lambda = b_2tf;
+                const lambda_p = 0.38 * Math.sqrt(E / Fy);
+                const lambda_r = Math.sqrt(E / Fy);
+                let clas = "";
+                if (lambda < lambda_p) clas = "Compacto";
+                else if (lambda <= lambda_r) clas = "No compacto";
+                else clas = "Esbelto";
+    
+                const f3Mn = f3_Mn(clas, Number(E), kc, sx, lambda, zx * Fy, Fy, lambda_p, lambda_r);
+                const MnR = MomentoResistente(clas, f2Mn, f3Mn);
+                const phiMnR = phib * MnR;
+    
+                if ((phiMnR / 9806.65) > Number(Mmax)) {
                     resultados.push({
                         perfil: p.designacion_mm || p.designacion_metrico || "SIN NOMBRE",
-                        Mn: Mn_local / 9806.65,
-                        diferencia: Mn_local / 9806.65 - Number(Mmax)
+                        Mn: phiMnR / 9806.65,
+                        diferencia: (phiMnR / 9806.65) - Number(Mmax),
                     });
                 }
             } catch (error) {
                 console.error("Error en perfil:", p.id, error);
             }
         });
-
+    
         const top3 = resultados
             .sort((a, b) => a.diferencia - b.diferencia)
             .slice(0, 3);
-
+    
         setIteracionesResult(top3);
     };
+    
 
 
 
@@ -323,6 +382,32 @@ function DisVigaRecFlex() {
                         })}
                     </select>
                     <Boton onClick={handleShowProperties}>Mostrar propiedades</Boton>
+
+                    {/* Botones Anterior / Siguiente */}
+        <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
+          <Boton
+            onClick={handlePrevProfile}
+            disabled={
+              profiles.findIndex(p => 
+                (p.designacion_mm === selectedMedida) ||
+                (p.designacion_metrico === selectedMedida)
+              ) <= 0
+            }
+          >
+            « Anterior
+          </Boton>
+          <Boton
+            onClick={handleNextProfile}
+            disabled={
+              profiles.findIndex(p => 
+                (p.designacion_mm === selectedMedida) ||
+                (p.designacion_metrico === selectedMedida)
+              ) === profiles.length - 1
+            }
+          >
+            Siguiente »
+          </Boton>
+        </div>
 
                     <div>
                         <label>Previsualizacion</label>
@@ -572,6 +657,18 @@ function DisVigaRecFlex() {
                         <label>Kg*m</label>
                     </div>
 
+                    <h3>Momento Res</h3>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>Mn</label>
+                        <input type="number" name="Mn" style={styles.inputg} value={MnR / 9806.65} readOnly />
+                        <label>Kg*m</label>
+                    </div>
+                    <div style={styles.label}>
+                        <label style={styles.tit1}>φMn</label>
+                        <input type="number" name="Mn" style={styles.inputg} value={phib*MnR / 9806.65} readOnly />
+                        <label>Kg*m</label>
+                    </div>
+
                     <h3>Cortante</h3>
                     <div style={styles.label}>
                         <label style={styles.tit1}>Vn</label>
@@ -634,210 +731,6 @@ function DisVigaRecFlex() {
     );
 }
 
-function GraficaMn({
-    Fy,
-    E,
-    Zx,
-    Lp,
-    Lr,
-    Sx,
-    Cb,
-    Lb,
-    J,
-    rts,
-    ho,
-    c = 1,
-}) {
-    const width = 900;
-    const height = 600;
-    const paddingLeft = 75;
-    const paddingTop = 40;
-    const paddingRight = 40;
-    const paddingBottom = 40;
-
-    if (!Fy || !Zx || !Sx || !Lp || !Lr || !E || !J || !rts || !ho) {
-        return <svg width={width} height={height} style={styles.svgGrafica} />;
-    }
-
-    const numPoints = 100;
-    const maxLb = Lr * 3;
-    const step = maxLb / numPoints;
-
-    const data = [];
-    for (let i = 0; i <= numPoints; i++) {
-        const Lb_i = i * step;
-        const Fcr_i = calcFcr(Cb, E, rts, Lb_i, J, c, Sx, ho);
-        const Mn_i = F2Mn(Fy, Zx, Lb_i, Lp, Lr, Fcr_i, Sx, Cb);
-        data.push({ Lb: Lb_i, Mn: Mn_i });
-    }
-
-    const maxLbVal = Math.max(...data.map((d) => d.Lb));
-    const maxMn = Math.max(...data.map((d) => d.Mn));
-
-    const scaleX = (val) =>
-        paddingLeft + (val / maxLbVal) * (width - paddingLeft - paddingRight);
-    const scaleY = (val) =>
-        height -
-        paddingBottom -
-        (val / maxMn) * (height - paddingTop - paddingBottom);
-
-    const pathD = data
-        .map((point, i) => {
-            const x = scaleX(point.Lb);
-            const y = scaleY(point.Mn);
-            return i === 0 ? `M${x},${y}` : `L${x},${y}`;
-        })
-        .join(" ");
-
-    const numGridLines = 10;
-    const xGridLines = [];
-    for (let i = 1; i < numGridLines; i++) {
-        const x =
-            paddingLeft +
-            i * ((width - paddingLeft - paddingRight) / numGridLines);
-        xGridLines.push(
-            <line
-                key={`x-grid-line-${i}`}
-                x1={x}
-                y1={paddingTop}
-                x2={x}
-                y2={height - paddingBottom}
-                style={{ stroke: "#ddd", strokeWidth: 1 }}
-            />
-        );
-        const lbValue = (i / numGridLines) * maxLbVal;
-        xGridLines.push(
-            <text
-                key={`x-grid-label-${i}`}
-                x={x}
-                y={height - paddingBottom + 15}
-                fontSize="10"
-                textAnchor="middle"
-                fill="#888"
-            >
-                {lbValue.toFixed(0)}
-            </text>
-        );
-    }
-
-    const yGridLines = [];
-    for (let i = 1; i < numGridLines; i++) {
-        const y =
-            paddingTop + i * ((height - paddingTop - paddingBottom) / numGridLines);
-        yGridLines.push(
-            <line
-                key={`y-grid-line-${i}`}
-                x1={paddingLeft}
-                y1={y}
-                x2={width - paddingRight}
-                y2={y}
-                style={{ stroke: "#ddd", strokeWidth: 1 }}
-            />
-        );
-        const mnValue =
-            ((height - paddingBottom - y) /
-                (height - paddingTop - paddingBottom)) *
-            maxMn;
-        yGridLines.push(
-            <text
-                key={`y-grid-label-${i}`}
-                x={paddingLeft - 5}
-                y={y + 3}
-                fontSize="10"
-                textAnchor="end"
-                fill="#888"
-            >
-                {mnValue.toFixed(0)}
-            </text>
-        );
-    }
-
-    const limitLines = [];
-    const addLimitLine = (xValue, color, label) => {
-        const x = scaleX(xValue);
-        limitLines.push(
-            <line
-                key={`line-${label}`}
-                x1={x}
-                y1={paddingTop}
-                x2={x}
-                y2={height - paddingBottom}
-                style={{ stroke: color, strokeDasharray: "5,5", strokeWidth: 2 }}
-            />,
-            <text
-                key={`label-${label}`}
-                x={x + 5}
-                y={paddingTop + 15}
-                fontSize="12"
-                fill={color}
-            >
-                {label}
-            </text>
-        );
-    };
-
-    if (Lp > 0 && Lp < maxLbVal) addLimitLine(Lp, "blue", "Lp");
-    if (Lr > 0 && Lr < maxLbVal) addLimitLine(Lr, "green", "Lr");
-
-    let circlePoint = null;
-    let textPoint = null;
-    if (Lb > 0 && Lb < maxLbVal) {
-        const FcrReal = calcFcr(Cb, E, rts, Lb, J, c, Sx, ho);
-        const MnReal = F2Mn(Fy, Zx, Lb, Lp, Lr, FcrReal, Sx, Cb);
-        const cx = scaleX(Lb);
-        const cy = scaleY(MnReal);
-        circlePoint = <circle cx={cx} cy={cy} r={5} style={styles.svgCircle} />;
-        textPoint = (
-            <text x={cx + 10} y={cy - 5} fontSize="12" style={styles.svgText}>
-                ({Lb.toFixed(1)}, {MnReal.toFixed(1)})
-            </text>
-        );
-    }
-
-    return (
-        <svg width={width} height={height} style={styles.svgGrafica}>
-            {xGridLines}
-            {yGridLines}
-            <line
-                x1={paddingLeft}
-                y1={height - paddingBottom}
-                x2={width - paddingRight}
-                y2={height - paddingBottom}
-                style={styles.svgAxis}
-            />
-            <line
-                x1={paddingLeft}
-                y1={paddingTop}
-                x2={paddingLeft}
-                y2={height - paddingBottom}
-                style={styles.svgAxis}
-            />
-            <text
-                x={width / 2}
-                y={height - 10}
-                textAnchor="middle"
-                fontSize="14"
-                fill="#000"
-            >
-                Lb [mm]
-            </text>
-            <text
-                x={15}
-                y={height / 2}
-                textAnchor="middle"
-                fontSize="14"
-                fill="#000"
-                transform={`rotate(-90, 15, ${height / 2})`}
-            >
-                Mn [N·mm]
-            </text>
-            <path d={pathD} style={styles.svgCurve} />
-            {limitLines}
-            {circlePoint}
-            {textPoint}
-        </svg>
-    );
-}
 
 
 const styles = {
@@ -901,52 +794,6 @@ const styles = {
         objectFit: "contain",
         marginBottom: "1rem",
     },
-    // Estilos para la gráfica SVG
-    svgGrafica: {
-        backgroundColor: "#fff",
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        marginTop: "2rem",
-    },
-
-    svgCurve: {
-        fill: "none",
-        stroke: "red",
-        strokeWidth: 2,
-    },
-
-    svgAxis: {
-        stroke: "#000",
-        strokeWidth: 1,
-    },
-
-    svgPath: {
-        stroke: "#343a40", // Gris oscuro
-        strokeWidth: 2,
-        fill: "none",
-    },
-    svgLine: {
-        strokeWidth: 1.5,
-        stroke: "red",
-    },
-    svgLineBlue: {
-        stroke: "blue",
-        strokeDasharray: "4,4",
-    },
-    svgLineGreen: {
-        stroke: "green",
-        strokeDasharray: "4,4",
-    },
-    svgCircle: {
-        fill: "red",
-        stroke: "black",
-        strokeWidth: 1,
-    },
-    svgText: {
-        fontSize: "12px",
-        fontFamily: "Arial, sans-serif",
-        fill: "#333",
-    },
+    
 }
 export default DisVigaRecFlex;

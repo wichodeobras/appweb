@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from .models import IR, HP, CE,CF, HR, IC, IE,  IRR, LD, LI, ORC, ORR  # Importa los modelos que necesites
 from .models import Infraestructura, SEP
+from .models import CAL_ARENA, MORTERO_ARENA, CEMENTO_ARENA, CEMENTO_ARENA_CERNIDA, CEMENTO_CALHIDRA_ARENA
 
 class IRSerializer(serializers.ModelSerializer):
     class Meta:
@@ -71,4 +72,29 @@ class infraSerializer(serializers.ModelSerializer):
 class SEPSerializer(serializers.ModelSerializer):
     class Meta:
         model = SEP
+        fields = '__all__'
+
+class CAL_ARENASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CAL_ARENA
+        fields = '__all__'
+
+class MORTERO_ARENASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MORTERO_ARENA
+        fields = '__all__'
+
+class CEMENTO_ARENASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CEMENTO_ARENA
+        fields = '__all__'
+
+class CEMENTO_ARENA_CERNIDASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CEMENTO_ARENA_CERNIDA
+        fields = '__all__'
+
+class CEMENTO_CALHIDRA_ARENASerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CEMENTO_CALHIDRA_ARENA
         fields = '__all__'

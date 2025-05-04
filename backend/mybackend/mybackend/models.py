@@ -582,7 +582,7 @@ class ZF(models.Model):
     j = models.FloatField()
     cw = models.FloatField()
     
-
+#COSTOS
 class ConceptoObra(models.Model):
     clave = models.CharField(max_length=40, unique=True)  # Clave identificadora, única
     descripcion = models.TextField()  # Descripción del concepto
@@ -636,6 +636,55 @@ class SCPT_BP(models.Model):
 
     def __str__(self):
         return f"{self.clave} - {self.descripcion[:50]}"
+
+#MORTEROS
+class CAL_ARENA(models.Model):
+    clasificacion = models.CharField(max_length=30)
+    Calhidra = models.FloatField()
+    Arena = models.FloatField()
+    Agua = models.FloatField()
+
+class MORTERO_ARENA(models.Model):
+    clasificacion = models.CharField(max_length=30)
+    Mortero = models.FloatField()
+    Arena = models.FloatField()
+    Agua = models.FloatField()
+
+
+class CEMENTO_ARENA(models.Model):
+    clasificacion = models.CharField(max_length=30)
+    Cemento = models.FloatField()
+    Arena = models.FloatField()
+    Agua = models.FloatField()
+
+class CEMENTO_ARENA_CERNIDA(models.Model):
+    clasificacion = models.CharField(max_length=30)
+    Cemento = models.FloatField()
+    Arena = models.FloatField()
+    Agua = models.FloatField()
+
+class CEMENTO_CALHIDRA_ARENA(models.Model):
+    clasificacion = models.CharField(max_length=30)
+    Cemento = models.FloatField()
+    Calhidra = models.FloatField()
+    Arena = models.FloatField()
+    Agua = models.FloatField()
+
+class CONCRETO_OBRA(models.Model):
+    Clasificacion= models.CharField(max_length=30)
+    fc= models.CharField(max_length=30)
+    Revenimiento= models.CharField(max_length=30)
+    Agregado= models.CharField(max_length=30)
+    Cemento = models.FloatField()
+    Grava = models.FloatField()
+    Arena = models.FloatField()
+    Agua = models.FloatField()
+
+#python manage.py makemigrations
+#python manage.py migrate
+
+
+
 
 
  

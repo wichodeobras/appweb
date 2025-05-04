@@ -15,7 +15,8 @@ import Granul from "./pages/GEOTECNIA/granulome";
 import Cimsuperf from "./pages/CIMENTACION/Cimentsuperf";
 import DisVigaEstanFlex from "./pages/aceroIMCA/VIGAIE";
 import Deflexion from "./pages/aceroIMCA/VIGAORR";
-
+import Compacero from "./pages/aceroIMCA/compresion";
+import DisCompORR from "./pages/aceroIMCA/COMPORR";
 import DisVigaCFlex from "./pages/aceroIMCA/VIGACF";
 import DisViga2CFlex from "./pages/aceroIMCA/VIGA2CF";
 import './App.css';
@@ -95,6 +96,7 @@ function Home() {
               <li style={styles.listItem}><Link to="/perfiles" style={styles.link}>Perfiles de acero</Link></li>
               <li style={styles.listItem}><Link to="/Diseflex" style={styles.link}>Diseño por flexión</Link></li>
               <li style={styles.listItem}><Link to="/Diseflexoc" style={styles.link}>Diseño por flexocompresion</Link></li>
+              <li style={styles.listItem}><Link to="/Disecomp" style={styles.link}>Diseño a compresion</Link></li>
             </ul>
           </div>
 
@@ -219,6 +221,8 @@ function App() {
         <Route path="/perfiles" component={ConsultaPerfiles} />
         <Route path="/Diseflex" component={Flexacero} />
         <Route path="/Diseflexoc" component={Flexcompacero} />
+        <Route path="/Disecomp/Nod" component={DisCompORR} />
+        <Route path="/Disecomp" component={Compacero} />
         <Route path="/Catal" component={CatalogosPres} />
         <Route path="/Disflex/DisIR" component={DisVigaRecFlex} />
         <Route path="/Disflex/DisIE" component={DisVigaEstanFlex} />
@@ -230,6 +234,7 @@ function App() {
         <Route path="/estatica/centroid" component={Centroi} />
         <Route path="/geotecnia/Granul" component={Granul} />
         <Route path="/ciment/superf" component={Cimsuperf} />
+
 
         {/* Agrega aquí la ruta de Topografía cuando esté lista */}
       </Switch>
